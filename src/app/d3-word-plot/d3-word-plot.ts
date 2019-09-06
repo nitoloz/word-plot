@@ -107,9 +107,9 @@ export function scatterPlotD3() {
                 let newYScale = d3.event.transform.rescaleY(yScale);
                 gXAxis.call(xAxis.scale(newXScale));
                 gYAxis.call(yAxis.scale(newYScale));
-                labelsG.selectAll('circle').data(data)
-                    .attr('cx', d => newXScale(parseInt(d[xAxisProperty])))
-                    .attr('cy', d => newYScale(parseInt(d[yAxisProperty])));
+                labelsG.selectAll('text').data(data)
+                    .attr('x', d => newXScale(parseInt(d[xAxisProperty])))
+                    .attr('y', d => newYScale(parseInt(d[yAxisProperty])));
             }
 
             svg.append("rect")
