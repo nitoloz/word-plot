@@ -5,7 +5,7 @@ const margin = {top: 50, right: 50, bottom: 50, left: 100};
 const height = 600;
 const width = 1000;
 
-function scatterPlotD3() {
+export function scatterPlotD3() {
 
     let initialConfiguration = {
         width: 1000,
@@ -13,10 +13,10 @@ function scatterPlotD3() {
         data: [],
         xAxisProperty: 'x',
         yAxisProperty: 'y',
-        // trellisingProperty: DataProperties.SEX,
+        trellisingProperty: 'color',
         xAxisLabel: 'Total experience (Years)',
         yAxisLabel: 'Salary (EUR)',
-        colorScale: d3.scaleOrdinal(d3.schemeSet3),
+        // colorScale: d3.scaleOrdinal(d3.schemeSet3),
         tooltipFormatter: (d) => {
             return ``;
         }
@@ -29,8 +29,8 @@ function scatterPlotD3() {
         yAxisLabel = initialConfiguration.yAxisLabel,
         xAxisProperty = initialConfiguration.xAxisProperty,
         yAxisProperty = initialConfiguration.yAxisProperty,
-        // trellisingProperty = initialConfiguration.trellisingProperty,
-        colorScale = initialConfiguration.colorScale,
+        trellisingProperty = initialConfiguration.trellisingProperty,
+        // colorScale = initialConfiguration.colorScale,
         tooltipFormatter = initialConfiguration.tooltipFormatter;
     let updateData = null;
 
@@ -78,7 +78,7 @@ function scatterPlotD3() {
 
 
             const yAxis = d3.axisLeft(yScale)
-                .tickFormat((d) => `EUR ${d / 1000}K`)
+                .tickFormat((d:any) => `EUR ${d / 1000}K`)
                 .tickSize(-width + margin.left + margin.right)
                 .tickSizeOuter(0);
 
@@ -107,7 +107,7 @@ function scatterPlotD3() {
                 let newYScale = d3.event.transform.rescaleY(yScale);
                 gXAxis.call(xAxis.scale(newXScale));
                 gYAxis.call(yAxis.scale(newYScale));
-                circlesG.selectAll('circle').data(data)
+                labelsG.selectAll('circle').data(data)
                     .attr('cx', d => newXScale(parseInt(d[xAxisProperty])))
                     .attr('cy', d => newYScale(parseInt(d[yAxisProperty])));
             }
@@ -119,51 +119,52 @@ function scatterPlotD3() {
                 .style("pointer-events", "all")
                 .attr('transform', `translate(${margin.left},${margin.top})`)
                 .call(zoom);
+            //
+            // const tooltip = d3.tip()
+            //     .attr("class", "d3-tip")
+            //     .offset([-8, 0])
+            //     .html(tooltipFormatter);
+            //
+            // svg.call(tooltip);
 
-            const tooltip = d3.tip()
-                .attr("class", "d3-tip")
-                .offset([-8, 0])
-                .html(tooltipFormatter);
-
-            svg.call(tooltip);
-
-            const circlesG = svg.append("g")
+            const labelsG = svg.append("g")
                 .attr("clip-path", "url(#clip)");
 
-            circlesG.selectAll('circle')
+            labelsG.selectAll('text')
                 .data(data)
                 .enter()
-                .append('circle')
-                .attr('cx', d => xScale(parseInt(d[xAxisProperty])))
-                .attr('cy', d => yScale(parseInt(d[yAxisProperty])))
-                .attr('r', '5')
-                .attr('stroke', 'grey')
-                .attr('stroke-width', 1)
-                .attr('fill', d => colorScale(d[trellisingProperty]))
-                .on('mouseover', (d) => {
-                    d3.select(this)
-                        .transition()
-                        .duration(100)
-                        .attr('r', 10)
-                        .attr('stroke-width', 3);
-                    tooltip.show(d);
-                })
-                .on('mouseout', () => {
-                    d3.select(this)
-                        .transition()
-                        .duration(100)
-                        .attr('r', 5)
-                        .attr('stroke-width', 1);
-                    tooltip.hide();
-                });
+                .append('text')
+                .attr('x', d => xScale(parseInt(d[xAxisProperty])))
+                .attr('y', d => yScale(parseInt(d[yAxisProperty])))
+                .text(d => d.text);
+                // .attr('r', '5')
+                // .attr('stroke', 'grey')
+                // .attr('stroke-width', 1)
+                // .attr('fill', d => colorScale(d[trellisingProperty]))
+                // .on('mouseover', (d) => {
+                //     d3.select(this)
+                //         .transition()
+                //         .duration(100)
+                //         .attr('r', 10)
+                //         .attr('stroke-width', 3);
+                //     tooltip.show(d);
+                // })
+                // .on('mouseout', () => {
+                //     d3.select(this)
+                //         .transition()
+                //         .duration(100)
+                //         .attr('r', 5)
+                //         .attr('stroke-width', 1);
+                //     tooltip.hide();
+                // });
 
-            const scatterPlotLegend = stackedLegendD3()
-                .colorScale(colorScale)
-                .data(colorScale.domain());
-
-            svg.append("g")
-                .attr("transform", `translate(${width - 120}, 0)`)
-                .call(scatterPlotLegend);
+            // const scatterPlotLegend = stackedLegendD3()
+            //     .colorScale(colorScale)
+            //     .data(colorScale.domain());
+            //
+            // svg.append("g")
+            //     .attr("transform", `translate(${width - 120}, 0)`)
+            //     .call(scatterPlotLegend);
 
             updateData = function () {
                 data = data.filter(d => parseInt(d[yAxisProperty]) > 0 && parseInt(d[xAxisProperty]) > 0);
@@ -192,41 +193,42 @@ function scatterPlotD3() {
                 gYAxis.transition(t)
                     .call(yAxis);
 
-                const updatedPoints = circlesG.selectAll('circle').data(data);
+                const updatedPoints = labelsG.selectAll('text').data(data);
 
                 updatedPoints
                     .enter()
-                    .append('circle')
-                    .attr('cx', d => xScale(parseInt(d[xAxisProperty])))
-                    .attr('cy', d => yScale(parseInt(d[yAxisProperty])))
-                    .attr('r', '5')
-                    .attr('stroke', 'grey')
-                    .attr('stroke-width', 1)
-                    .attr('fill', d => colorScale(d[trellisingProperty]))
-                    .on('mouseover', function (d) {
-                        d3.select(this)
-                            .transition()
-                            .duration(100)
-                            .attr('r', 10)
-                            .attr('stroke-width', 3);
-                        tooltip.show(d);
-                    })
-                    .on('mouseout', function () {
-                        d3.select(this)
-                            .transition()
-                            .duration(100)
-                            .attr('r', 5)
-                            .attr('stroke-width', 1);
-                        tooltip.hide();
-                    });
+                    .append('text')
+                    .attr('x', d => xScale(parseInt(d[xAxisProperty])))
+                    .attr('y', d => yScale(parseInt(d[yAxisProperty])))
+                    .text(d => d.text);
+                    // .attr('r', '5')
+                    // .attr('stroke', 'grey')
+                    // .attr('stroke-width', 1)
+                    // .attr('fill', d => colorScale(d[trellisingProperty]))
+                    // .on('mouseover', function (d) {
+                    //     d3.select(this)
+                    //         .transition()
+                    //         .duration(100)
+                    //         .attr('r', 10)
+                    //         .attr('stroke-width', 3);
+                    //     tooltip.show(d);
+                    // })
+                    // .on('mouseout', function () {
+                    //     d3.select(this)
+                    //         .transition()
+                    //         .duration(100)
+                    //         .attr('r', 5)
+                    //         .attr('stroke-width', 1);
+                    //     tooltip.hide();
+                    // });
 
                 updatedPoints
                     .transition()
                     .ease(d3.easeLinear)
                     .duration(750)
-                    .attr('cx', d => xScale(parseInt(d[xAxisProperty])))
-                    .attr('cy', d => yScale(parseInt(d[yAxisProperty])))
-                    .attr('fill', d => colorScale(d[trellisingProperty]));
+                    .attr('x', d => xScale(parseInt(d[xAxisProperty])))
+                    .attr('y', d => yScale(parseInt(d[yAxisProperty])))
+                    // .attr('fill', d => colorScale(d[trellisingProperty]));
 
                 updatedPoints.exit()
                     .transition()
@@ -283,11 +285,11 @@ function scatterPlotD3() {
         return chart;
     };
 
-    chart.colorScale = function (value) {
-        if (!arguments.length) return colorScale;
-        colorScale = value;
-        return chart;
-    };
+    // chart.colorScale = function (value) {
+    //     if (!arguments.length) return colorScale;
+    //     colorScale = value;
+    //     return chart;
+    // };
 
     chart.tooltipFormatter = function (value) {
         if (!arguments.length) {
