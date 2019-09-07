@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {scatterPlotD3} from "../d3-word-plot/d3-word-plot";
+import {wordPlotD3} from "../d3-word-plot/d3-word-plot";
 // import {Utils} from "../d3-word-plot/utils";
 import * as d3 from 'd3'
 
@@ -11,66 +11,44 @@ import * as d3 from 'd3'
 export class WordPlotComponent implements AfterViewInit {
   salaryScatterChart: any;
   data = [
-    {"x": "", "y": "48000", "text": "Software-Engineer"},
-    {
-    "x": "37",
-    "y": "45000",
-    "text": "It support engineer"
-  }, {"x": "32", "y": "60000", "text": "Sr. QA"}, {"x": "", "y": "80000", "text": "DevOps"}, {
-    "x": "39",
-    "y": "75000",
-    "text": "Java Developer"
-  }, {"x": "30", "y": "55000", "text": "C++ Developer"}, {"x": "", "y": "60000", "text": "C++ developer"}, {
-    "x": "34",
-    "y": "82000",
-    "text": "Team manager"
-  }, {"x": "32", "y": "75000", "text": "Tech lead"}, {
-    "x": "23",
-    "y": "73000",
-    "text": "Senior Software Engineer (Ruby)"
-  }, {"x": "", "y": "66000", "text": "QA Manager"}, {"x": "", "y": "74000", "text": "Frontend Developer"}, {
-    "x": "35",
-    "y": "60000",
-    "text": "Sr. JS developer"
-  }, {"x": "", "y": "63000", "text": "C++/C# Developer"}, {
-    "x": "30",
-    "y": "60000",
-    "text": "Frontend Developer"
-  }, {"x": "32", "y": "65000", "text": "PHP Developer"}, {"x": "42", "y": "60000", "text": "SAP Berater"}, {
-    "x": "23",
-    "y": "73000",
-    "text": "Senior Software Engineer (Ruby)"
-  }, {"x": "27", "y": "53000", "text": ".NET"}, {"x": "43", "y": "70000", "text": "Project Manager"}, {
-    "x": "32",
-    "y": "67300",
-    "text": "QA Manager"
-  }, {"x": "30", "y": "75000", "text": "Software Development Engineer"}, {
-    "x": "34",
-    "y": "68000",
-    "text": "Software Engineer"
-  }, {"x": "27", "y": "50400", "text": "Senior Android Engineer"}, {
-    "x": "25",
-    "y": "50000",
-    "text": "Java/Node.js developer"
-  }, {"x": "31", "y": "65000", "text": "C++ Senior Software Developer"}, {
-    "x": "32",
-    "y": "66000",
-    "text": "Senior Software Engeneer"
-  }, {"x": "27", "y": "65000", "text": "JS Developer"}, {"x": "", "y": "70000", "text": "team lead"}, {
-    "x": "",
-    "y": "85000",
-    "text": "Data Science"
-  }];
+    {x: "2", y: "1.1", text: "Software-Engineer"},
+    {x: "37", y: "2", text: "It support engineer"},
+    {x: "32", y: "3.5", text: "Sr. QA"}, {x: "", y: "80000", text: "DevOps"},
+    {x: "39", y: "6", text: "Java Developer"},
+    {x: "30", y: "2.7", text: "C++ Developer"}, {x: "", y: "60000", text: "C++ developer"},
+    {x: "34", y: "5", text: "Team manager"},
+    {x: "32", y: "8", text: "Tech lead"},
+    {x: "23", y: "3", text: "Senior Software Engineer (Ruby)"},
+    {x: "3", y: "6.7", text: "QA Manager"},
+    {x: "9", y: "1", text: "Frontend Developer"},
+    {x: "35", y: "4", text: "Sr. JS developer"},
+    {x: "1", y: "8", text: "C++/C# Developer"},
+    {x: "30", y: "9", text: "Frontend Developer"},
+    {x: "32", y: "10", text: "PHP Developer"},
+    {x: "42", y: "7", text: "SAP Berater"},
+    {x: "23", y: "2.9", text: "Senior Software Engineer (Ruby)"},
+    {x: "27", y: "4.6", text: ".NET"},
+    {x: "43", y: "6.3", text: "Project Manager"},
+    {x: "32", y: "6", text: "QA Manager"},
+    {x: "30", y: "3", text: "Software Development Engineer"},
+    {x: "34", y: "2", text: "Software Engineer"},
+    {x: "27", y: "8.5", text: "Senior Android Engineer"},
+    {x: "25", y: "1.9", text: "Java/Node.js developer"},
+    {x: "31", y: "3", text: "C++ Senior Software Developer"},
+    {x: "32", y: "7", text: "Senior Software Engeneer"},
+    {x: "27", y: "9", text: "JS Developer"},
+    {x: "4", y: "5", text: "team lead"},
+    {x: "", y: "7.3", text: "Data Science"}];
 
   constructor() {
   }
 
   ngAfterViewInit() {
-    this.salaryScatterChart = scatterPlotD3();
+    this.salaryScatterChart = wordPlotD3();
     this.salaryScatterChart.height(600);
     this.salaryScatterChart.width(1000);
 
-    d3.select("#scatter-chart-area")
+    d3.select("#word-plot-area")
       .call(this.salaryScatterChart);
 
     this.salaryScatterChart.data(this.data)
