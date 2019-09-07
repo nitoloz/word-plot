@@ -34,9 +34,9 @@ export function wordPlotD3() {
 
   function chart(selection) {
     selection.each(function () {
-      data = data.filter(d => parseInt(d[yAxisProperty]) > 0 && parseInt(d[xAxisProperty]) > 0);
-      let yAxisValues = data.map(d => parseInt(d[yAxisProperty]));
-      let xAxisValues = data.map(d => parseInt(d[xAxisProperty]));
+      data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
+      let yAxisValues = data.map(d => parseFloat(d[yAxisProperty]));
+      let xAxisValues = data.map(d => parseFloat(d[xAxisProperty]));
 
       const xScale = d3.scaleLinear()
         .domain([
@@ -105,8 +105,8 @@ export function wordPlotD3() {
         gXAxis.call(xAxis.scale(newXScale));
         gYAxis.call(yAxis.scale(newYScale));
         labelsG.selectAll('text').data(data)
-          .attr('x', d => newXScale(parseInt(d[xAxisProperty])))
-          .attr('y', d => newYScale(parseInt(d[yAxisProperty])));
+          .attr('x', d => newXScale(parseFloat(d[xAxisProperty])))
+          .attr('y', d => newYScale(parseFloat(d[yAxisProperty])));
       }
 
       svg.append("rect")
@@ -131,8 +131,8 @@ export function wordPlotD3() {
         .data(data)
         .enter()
         .append('text')
-        .attr('x', d => xScale(parseInt(d[xAxisProperty])))
-        .attr('y', d => yScale(parseInt(d[yAxisProperty])))
+        .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
+        .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
         .text(d => d.text);
       // .attr('r', '5')
       // .attr('stroke', 'grey')
@@ -164,9 +164,9 @@ export function wordPlotD3() {
       //     .call(scatterPlotLegend);
 
       updateData = function () {
-        data = data.filter(d => parseInt(d[yAxisProperty]) > 0 && parseInt(d[xAxisProperty]) > 0);
-        yAxisValues = data.map(d => parseInt(d[yAxisProperty]));
-        xAxisValues = data.map(d => parseInt(d[xAxisProperty]));
+        data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
+        yAxisValues = data.map(d => parseFloat(d[yAxisProperty]));
+        xAxisValues = data.map(d => parseFloat(d[xAxisProperty]));
 
         xScale.domain([
           d3.min([0, d3.min(xAxisValues)]),
@@ -195,8 +195,8 @@ export function wordPlotD3() {
         updatedPoints
           .enter()
           .append('text')
-          .attr('x', d => xScale(parseInt(d[xAxisProperty])))
-          .attr('y', d => yScale(parseInt(d[yAxisProperty])))
+          .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
           .text(d => d.text);
         // .attr('r', '5')
         // .attr('stroke', 'grey')
@@ -223,8 +223,8 @@ export function wordPlotD3() {
           .transition()
           .ease(d3.easeLinear)
           .duration(750)
-          .attr('x', d => xScale(parseInt(d[xAxisProperty])))
-          .attr('y', d => yScale(parseInt(d[yAxisProperty])))
+          .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
 
         updatedPoints.exit()
           .transition()
