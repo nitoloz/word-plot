@@ -3,8 +3,6 @@ import * as d3Tip from 'd3-tip';
 import {Utils} from "./utils";
 
 const margin = {top: 50, right: 50, bottom: 50, left: 100};
-const height = 600;
-const width = 1000;
 
 export function wordPlotD3() {
 
@@ -122,7 +120,7 @@ export function wordPlotD3() {
 
       const tooltip = d3Tip()
         .attr("class", "d3-tip")
-        .offset([-8, 0])
+        .offset([-5, 0])
         .html(tooltipFormatter);
 
       svg.call(tooltip);
@@ -187,10 +185,6 @@ export function wordPlotD3() {
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
           .text(d => d.text)
-          // .attr('r', '5')
-          // .attr('stroke', 'grey')
-          // .attr('stroke-width', 1)
-          // .attr('fill', d => colorScale(d[trellisingProperty]))
           .on('mouseover', function (d) {
             tooltip.show(d, this);
           })
@@ -203,7 +197,7 @@ export function wordPlotD3() {
           .ease(d3.easeLinear)
           .duration(750)
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
-          .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
+          .attr('y', d => yScale(parseFloat(d[yAxisProperty])));
 
         updatedPoints.exit()
           .transition()
@@ -259,12 +253,6 @@ export function wordPlotD3() {
     trellisingProperty = value;
     return chart;
   };
-
-  // chart.colorScale = function (value) {
-  //     if (!arguments.length) return colorScale;
-  //     colorScale = value;
-  //     return chart;
-  // };
 
   chart.tooltipFormatter = function (value) {
     if (!arguments.length) {
