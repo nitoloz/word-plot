@@ -18,7 +18,7 @@ export function wordPlotD3() {
     xAxisLabel: 'Pain/Symptoms',
     yAxisLabel: 'Scientific Speak',
     tooltipFormatter: (d) => {
-      return  `Pain/Symptoms: ${d.x}<br>
+      return `Pain/Symptoms: ${d.x}<br>
             Scientific Speak ${d.y}<br>
             Name: ${d.text}<br>`;
     }
@@ -88,12 +88,12 @@ export function wordPlotD3() {
         .call(yAxis);
 
       Utils.appendXAxisTitle(gXAxis, width / 2, 15, xAxisLabel);
-      Utils.appendYAxisTitle(gYAxis, -height/2, -25, yAxisLabel);
+      Utils.appendYAxisTitle(gYAxis, -height / 2, -25, yAxisLabel);
       Utils.appendTitle(svg, width / 2, margin.top / 2, `${yAxisLabel} vs ${xAxisLabel}`);
 
       //Zoom setup
       const zoom = d3.zoom()
-        .scaleExtent([1 / 2, 10])
+        .scaleExtent([1 / 2, 20])
         .extent([[0, 0], [width, height]])
         .filter(function () {
           return d3.event.type === 'touchstart'
@@ -121,9 +121,9 @@ export function wordPlotD3() {
         .call(zoom);
 
       const tooltip = d3Tip()
-          .attr("class", "d3-tip")
-          .offset([-8, 0])
-          .html(tooltipFormatter);
+        .attr("class", "d3-tip")
+        .offset([-8, 0])
+        .html(tooltipFormatter);
 
       svg.call(tooltip);
 
@@ -137,26 +137,12 @@ export function wordPlotD3() {
         .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
         .text(d => d.text)
-      // .attr('r', '5')
-      // .attr('stroke', 'grey')
-      // .attr('stroke-width', 1)
-      // .attr('fill', d => colorScale(d[trellisingProperty]))
-      .on('mouseover', function(d) {
-          d3.select(this)
-              .transition()
-              .duration(100)
-              .attr('r', 10)
-              .attr('stroke-width', 3);
+        .on('mouseover', function (d) {
           tooltip.show(d, this);
-      })
-      .on('mouseout', function() {
-          d3.select(this)
-              .transition()
-              .duration(100)
-              .attr('r', 5)
-              .attr('stroke-width', 1);
+        })
+        .on('mouseout', function () {
           tooltip.hide();
-      });
+        });
 
       // const scatterPlotLegend = stackedLegendD3()
       //     .colorScale(colorScale)
@@ -200,27 +186,17 @@ export function wordPlotD3() {
           .append('text')
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
-          .text(d => d.text);
-        // .attr('r', '5')
-        // .attr('stroke', 'grey')
-        // .attr('stroke-width', 1)
-        // .attr('fill', d => colorScale(d[trellisingProperty]))
-        // .on('mouseover', function (d) {
-        //     d3.select(this)
-        //         .transition()
-        //         .duration(100)
-        //         .attr('r', 10)
-        //         .attr('stroke-width', 3);
-        //     tooltip.show(d);
-        // })
-        // .on('mouseout', function () {
-        //     d3.select(this)
-        //         .transition()
-        //         .duration(100)
-        //         .attr('r', 5)
-        //         .attr('stroke-width', 1);
-        //     tooltip.hide();
-        // });
+          .text(d => d.text)
+          // .attr('r', '5')
+          // .attr('stroke', 'grey')
+          // .attr('stroke-width', 1)
+          // .attr('fill', d => colorScale(d[trellisingProperty]))
+          .on('mouseover', function (d) {
+            tooltip.show(d, this);
+          })
+          .on('mouseout', function () {
+            tooltip.hide();
+          });
 
         updatedPoints
           .transition()
