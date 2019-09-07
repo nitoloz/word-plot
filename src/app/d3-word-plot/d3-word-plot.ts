@@ -6,7 +6,7 @@ const margin = {top: 50, right: 50, bottom: 50, left: 100};
 
 export function wordPlotD3() {
 
-  let initialConfiguration = {
+  const initialConfiguration = {
     width: 1000,
     height: 600,
     data: [],
@@ -22,6 +22,8 @@ export function wordPlotD3() {
     }
   };
 
+  const markers = [{text: 'EMERGENT', x: 5, y: 10}, {text: 'DOMINANT', x: 5, y: 10}];
+
   let width = initialConfiguration.width,
     height = initialConfiguration.height,
     data = initialConfiguration.data,
@@ -31,7 +33,7 @@ export function wordPlotD3() {
     yAxisProperty = initialConfiguration.yAxisProperty,
     trellisingProperty = initialConfiguration.trellisingProperty,
     tooltipFormatter = initialConfiguration.tooltipFormatter;
-  let updateData = null;
+  let updateData, zoomIn, zoomOut = null;
 
   function chart(selection) {
     selection.each(function () {
@@ -110,7 +112,8 @@ export function wordPlotD3() {
           .attr('y', d => newYScale(parseFloat(d[yAxisProperty])));
       }
 
-      svg.append("rect")
+      const zoomHost = svg.append("rect")
+        .attr("class", "zoom-rect")
         .attr("width", width - margin.left - margin.right)
         .attr("height", height - margin.top - margin.bottom)
         .style("fill", "none")
@@ -208,6 +211,14 @@ export function wordPlotD3() {
         svg.select('.x.axis.label').text(xAxisLabel);
         svg.select('.y.axis.label').text(yAxisLabel);
       };
+
+      zoomIn = function () {
+        zoom.scaleBy(zoomHost.transition().duration(750), 1.5);
+      };
+
+      zoomOut = function () {
+        zoom.scaleBy(zoomHost.transition().duration(750), 0.5);
+      };
     })
   }
 
@@ -271,6 +282,16 @@ export function wordPlotD3() {
     if (!arguments.length) return data;
     data = value;
     if (typeof updateData === 'function') updateData();
+    return chart;
+  };
+
+  chart.zoomIn = function () {
+    if (typeof zoomIn === 'function') zoomIn();
+    return chart;
+  };
+
+  chart.zoomOut = function () {
+    if (typeof zoomOut === 'function') zoomOut();
     return chart;
   };
 

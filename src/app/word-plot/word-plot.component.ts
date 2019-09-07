@@ -33,4 +33,16 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  zoomIn() {
+    if (this.salaryScatterChart) {
+      this.salaryScatterChart.zoomIn();
+    }
+  }
+
+  zoomOut() {
+    if (this.salaryScatterChart) {
+      this.salaryScatterChart.zoomOut();
+    }
+  }
+
 }
