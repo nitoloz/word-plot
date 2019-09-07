@@ -14,13 +14,12 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
   @Input() plotData: any[];
 
   constructor() {
-  }
-
-  ngAfterViewInit() {
     this.salaryScatterChart = wordPlotD3();
     this.salaryScatterChart.height(600);
     this.salaryScatterChart.width(1000);
+  }
 
+  ngAfterViewInit() {
     d3.select(this.chartWrapper.nativeElement)
       .call(this.salaryScatterChart);
     if (this.plotData) {

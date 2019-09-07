@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import * as d3Tip from 'd3-tip';
 import {Utils} from "./utils";
 
 const margin = {top: 50, right: 50, bottom: 50, left: 100};
@@ -17,7 +18,9 @@ export function wordPlotD3() {
     xAxisLabel: 'Pain/Symptoms',
     yAxisLabel: 'Scientific Speak',
     tooltipFormatter: (d) => {
-      return ``;
+      return  `Pain/Symptoms: ${d.x}<br>
+            Scientific Speak ${d.y}<br>
+            Name: ${d.text}<br>`;
     }
   };
 
@@ -116,13 +119,13 @@ export function wordPlotD3() {
         .style("pointer-events", "all")
         .attr('transform', `translate(${margin.left},${margin.top})`)
         .call(zoom);
-      //
-      // const tooltip = d3.tip()
-      //     .attr("class", "d3-tip")
-      //     .offset([-8, 0])
-      //     .html(tooltipFormatter);
-      //
-      // svg.call(tooltip);
+
+      const tooltip = d3Tip()
+          .attr("class", "d3-tip")
+          .offset([-8, 0])
+          .html(tooltipFormatter);
+
+      svg.call(tooltip);
 
       const labelsG = svg.append("g")
         .attr("clip-path", "url(#clip)");
@@ -133,27 +136,27 @@ export function wordPlotD3() {
         .append('text')
         .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
-        .text(d => d.text);
+        .text(d => d.text)
       // .attr('r', '5')
       // .attr('stroke', 'grey')
       // .attr('stroke-width', 1)
       // .attr('fill', d => colorScale(d[trellisingProperty]))
-      // .on('mouseover', (d) => {
-      //     d3.select(this)
-      //         .transition()
-      //         .duration(100)
-      //         .attr('r', 10)
-      //         .attr('stroke-width', 3);
-      //     tooltip.show(d);
-      // })
-      // .on('mouseout', () => {
-      //     d3.select(this)
-      //         .transition()
-      //         .duration(100)
-      //         .attr('r', 5)
-      //         .attr('stroke-width', 1);
-      //     tooltip.hide();
-      // });
+      .on('mouseover', function(d) {
+          d3.select(this)
+              .transition()
+              .duration(100)
+              .attr('r', 10)
+              .attr('stroke-width', 3);
+          tooltip.show(d, this);
+      })
+      .on('mouseout', function() {
+          d3.select(this)
+              .transition()
+              .duration(100)
+              .attr('r', 5)
+              .attr('stroke-width', 1);
+          tooltip.hide();
+      });
 
       // const scatterPlotLegend = stackedLegendD3()
       //     .colorScale(colorScale)
