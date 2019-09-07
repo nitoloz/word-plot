@@ -155,16 +155,15 @@ export function wordPlotD3() {
         yAxisValues = data.map(d => parseFloat(d[yAxisProperty]));
         xAxisValues = data.map(d => parseFloat(d[xAxisProperty]));
 
-        xScale.domain([
-          d3.min([0, d3.min(xAxisValues)]),
-          d3.max([0, d3.max(xAxisValues)])]);
+        const xScaleMin = d3.min([0, d3.min(xAxisValues)]);
+        const xScaleMax = d3.max([0, d3.max(xAxisValues)]);
+        xScale.domain([xScaleMin - xScaleMin * 0.1, xScaleMax + xScaleMax * 0.1]);
 
         xAxis.scale(xScale);
 
-        yScale.domain([
-          d3.min([d3.min(yAxisValues)]),
-          d3.max([d3.max(yAxisValues)])
-        ]);
+        const yScaleMin = d3.min([d3.min(yAxisValues)]);
+        const yScaleMax = d3.max([d3.max(yAxisValues)]);
+        yScale.domain([yScaleMin - yScaleMin * 0.1, yScaleMax + yScaleMax * 0.1]);
 
         yAxis.scale(yScale);
 
