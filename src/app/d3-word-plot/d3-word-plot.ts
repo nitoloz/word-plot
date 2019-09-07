@@ -33,7 +33,7 @@ export function wordPlotD3() {
     yAxisProperty = initialConfiguration.yAxisProperty,
     trellisingProperty = initialConfiguration.trellisingProperty,
     tooltipFormatter = initialConfiguration.tooltipFormatter;
-  let updateData, zoomIn, zoomOut = null;
+  let updateData, zoomIn, zoomOut, resetZoom = null;
 
   function chart(selection) {
     selection.each(function () {
@@ -213,11 +213,15 @@ export function wordPlotD3() {
       };
 
       zoomIn = function () {
-        zoom.scaleBy(zoomHost.transition().duration(750), 1.5);
+        zoom.scaleBy(zoomHost.transition().duration(750), 2);
       };
 
       zoomOut = function () {
         zoom.scaleBy(zoomHost.transition().duration(750), 0.5);
+      };
+
+      resetZoom = function () {
+        zoom.scaleTo(zoomHost.transition().duration(750), 0.9);
       };
     })
   }
@@ -292,6 +296,11 @@ export function wordPlotD3() {
 
   chart.zoomOut = function () {
     if (typeof zoomOut === 'function') zoomOut();
+    return chart;
+  };
+
+  chart.resetZoom = function () {
+    if (typeof resetZoom === 'function') resetZoom();
     return chart;
   };
 

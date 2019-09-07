@@ -45,4 +45,10 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  resetZoom() {
+    if (this.salaryScatterChart) {
+      this.salaryScatterChart.resetZoom();
+    }
+  }
+
 }
