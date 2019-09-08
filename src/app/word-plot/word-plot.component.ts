@@ -2,6 +2,13 @@ import {AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, V
 import {wordPlotD3} from './d3-word-plot/d3-word-plot';
 import * as d3 from 'd3';
 
+
+export interface PlotData {
+  x: string | number;
+  y: string | number;
+  text: string;
+}
+
 @Component({
   selector: 'app-word-plot',
   templateUrl: './word-plot.component.html',
@@ -11,7 +18,7 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
   salaryScatterChart: any;
   @ViewChild('chartWrapper', {static: false}) chartWrapper: ElementRef;
 
-  @Input() plotData: any[];
+  @Input() plotData: PlotData[];
 
   constructor () {
     this.salaryScatterChart = wordPlotD3();

@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {PlotData} from './word-plot/word-plot.component';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +7,7 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  public data = [
+  public data: PlotData[] = [
     {x: '1', y: '1.1', text: 'night_blindness'},
     {x: '3.7', y: '2', text: 'diplopia'},
     {x: '3.2', y: '3.5', text: 'nearsighted'},
