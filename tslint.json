@@ -21,6 +21,7 @@
       "app",
       "kebab-case"
     ],
+    "curly": [true, "ignore-same-line"],
     "import-blacklist": [
       true,
       "rxjs/Rx"
@@ -67,6 +68,8 @@
       "as-needed"
     ],
     "object-literal-sort-keys": false,
+    "only-arrow-functions": false,
+    "one-variable-per-declaration": false,
     "ordered-imports": false,
     "quotemark": [
       true,
@@ -81,6 +84,7 @@
     "no-output-on-prefix": true,
     "no-output-rename": true,
     "no-outputs-metadata-property": true,
+    "space-before-function-paren": true,
     "template-banana-in-box": true,
     "template-no-negated-async": true,
     "use-lifecycle-interface": true,

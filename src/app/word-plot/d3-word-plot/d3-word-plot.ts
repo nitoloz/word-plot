@@ -1,10 +1,10 @@
-import * as d3 from 'd3'
+import * as d3 from 'd3';
 import * as d3Tip from 'd3-tip';
-import {Utils} from "./utils";
+import {Utils} from './utils';
 
 const margin = {top: 50, right: 50, bottom: 50, left: 100};
 
-export function wordPlotD3() {
+export function wordPlotD3 () {
 
   const initialConfiguration = {
     width: 1000,
@@ -22,7 +22,10 @@ export function wordPlotD3() {
     }
   };
 
-  const markers = [{text: 'EMERGENT', x: 5, y: 10, color:'#ef999c'}, {text: 'DOMINANT', x: 10, y: 10, color:'#cfcbd2'}];
+  const markers = [
+    {text: 'EMERGENT', x: 5, y: 10, color: '#ef999c'},
+    {text: 'DOMINANT', x: 10, y: 10, color: '#cfcbd2'}
+  ];
 
   let width = initialConfiguration.width,
     height = initialConfiguration.height,
@@ -35,7 +38,7 @@ export function wordPlotD3() {
     tooltipFormatter = initialConfiguration.tooltipFormatter;
   let updateData, zoomIn, zoomOut, resetZoom = null;
 
-  function chart(selection) {
+  function chart (selection) {
     selection.each(function () {
       data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
       let yAxisValues = data.map(d => parseFloat(d[yAxisProperty]));
@@ -57,24 +60,24 @@ export function wordPlotD3() {
       const svg = selection.append('svg')
         .attr('height', height)
         .attr('width', width)
-        .append("g");
+        .append('g');
 
-      //Clippath in order to prevent points from being visible outside of chart area
-      //https://developer.mozilla.org/ru/docs/Web/CSS/clip-path
-      svg.append("defs").append("clipPath")
-        .attr("id", "clip")
-        .append("rect")
-        .attr("width", width - margin.left - margin.right)
-        .attr("height", height - margin.top - margin.bottom)
+      // Clippath in order to prevent points from being visible outside of chart area
+      // https://developer.mozilla.org/ru/docs/Web/CSS/clip-path
+      svg.append('defs').append('clipPath')
+        .attr('id', 'clip')
+        .append('rect')
+        .attr('width', width - margin.left - margin.right)
+        .attr('height', height - margin.top - margin.bottom)
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
       const xAxis = d3.axisBottom(xScale)
         .tickSize(-height + margin.top + margin.bottom)
         .tickSizeOuter(0);
 
-      const gXAxis = svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", `translate(0,${(height - margin.top)})`)
+      const gXAxis = svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', `translate(0,${(height - margin.top)})`)
         .call(xAxis);
 
       const yAxis = d3.axisLeft(yScale)
@@ -82,16 +85,16 @@ export function wordPlotD3() {
         .tickSize(-width + margin.left + margin.right)
         .tickSizeOuter(0);
 
-      const gYAxis = svg.append("g")
-        .attr("class", "y axis")
-        .attr("transform", `translate(${margin.left},0)`)
+      const gYAxis = svg.append('g')
+        .attr('class', 'y axis')
+        .attr('transform', `translate(${margin.left},0)`)
         .call(yAxis);
 
       Utils.appendXAxisTitle(gXAxis, width / 2, 15, xAxisLabel);
       Utils.appendYAxisTitle(gYAxis, -height / 2, -25, yAxisLabel);
       Utils.appendTitle(svg, width / 2, margin.top / 2, `${yAxisLabel} vs ${xAxisLabel}`);
 
-      //Zoom setup
+      // Zoom setup
       const zoom = d3.zoom()
         .scaleExtent([1 / 2, 20])
         .extent([[0, 0], [width, height]])
@@ -100,39 +103,26 @@ export function wordPlotD3() {
             ? false : d3.event.type === 'wheel'
               ? d3.event.ctrlKey : true;
         })
-        .on("zoom", zoomed);
+        .on('zoom', zoomed);
 
-      function zoomed() {
-        let newXScale = d3.event.transform.rescaleX(xScale);
-        let newYScale = d3.event.transform.rescaleY(yScale);
-        gXAxis.call(xAxis.scale(newXScale));
-        gYAxis.call(yAxis.scale(newYScale));
-        labelsG.selectAll('.text-data').data(data)
-          .attr('x', d => newXScale(parseFloat(d[xAxisProperty])))
-          .attr('y', d => newYScale(parseFloat(d[yAxisProperty])));
-        labelsG.selectAll('.text-headers').data(markers)
-          .attr('x', d => newXScale(parseFloat(d.x)))
-          .attr('y', d => newYScale(parseFloat(d.y)));
-      }
-
-      const zoomHost = svg.append("rect")
-        .attr("class", "zoom-rect")
-        .attr("width", width - margin.left - margin.right)
-        .attr("height", height - margin.top - margin.bottom)
-        .style("fill", "none")
-        .style("pointer-events", "all")
+      const zoomHost = svg.append('rect')
+        .attr('class', 'zoom-rect')
+        .attr('width', width - margin.left - margin.right)
+        .attr('height', height - margin.top - margin.bottom)
+        .style('fill', 'none')
+        .style('pointer-events', 'all')
         .attr('transform', `translate(${margin.left},${margin.top})`)
         .call(zoom);
 
       const tooltip = d3Tip()
-        .attr("class", "d3-tip")
+        .attr('class', 'd3-tip')
         .offset([-5, 0])
         .html(tooltipFormatter);
 
       svg.call(tooltip);
 
-      const labelsG = svg.append("g")
-        .attr("clip-path", "url(#clip)");
+      const labelsG = svg.append('g')
+        .attr('clip-path', 'url(#clip)');
 
       labelsG.selectAll('.text-headers')
         .data(markers)
@@ -142,15 +132,15 @@ export function wordPlotD3() {
         .attr('x', d => xScale(parseFloat(d.x)))
         .attr('y', d => yScale(parseFloat(d.y)))
         .style('text-anchor', 'end')
-        .attr('font-size','20')
-        .attr('fill',(d) => d.color)
+        .attr('font-size', '20')
+        .attr('fill', (d) => d.color)
         .text(d => d.text);
 
       labelsG.selectAll('.text-data')
         .data(data)
         .enter()
         .append('text')
-        .attr('class','text-data')
+        .attr('class', 'text-data')
         .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
         .text(d => d.text)
@@ -161,12 +151,25 @@ export function wordPlotD3() {
           tooltip.hide();
         });
 
+      function zoomed () {
+        const newXScale = d3.event.transform.rescaleX(xScale);
+        const newYScale = d3.event.transform.rescaleY(yScale);
+        gXAxis.call(xAxis.scale(newXScale));
+        gYAxis.call(yAxis.scale(newYScale));
+        labelsG.selectAll('.text-data').data(data)
+          .attr('x', d => newXScale(parseFloat(d[xAxisProperty])))
+          .attr('y', d => newYScale(parseFloat(d[yAxisProperty])));
+        labelsG.selectAll('.text-headers').data(markers)
+          .attr('x', d => newXScale(parseFloat(d.x)))
+          .attr('y', d => newYScale(parseFloat(d.y)));
+      }
+
       // const scatterPlotLegend = stackedLegendD3()
       //     .colorScale(colorScale)
       //     .data(colorScale.domain());
       //
-      // svg.append("g")
-      //     .attr("transform", `translate(${width - 120}, 0)`)
+      // svg.append('g')
+      //     .attr('transform', `translate(${width - 120}, 0)`)
       //     .call(scatterPlotLegend);
 
       updateData = function () {
@@ -207,7 +210,7 @@ export function wordPlotD3() {
         updatedPoints
           .enter()
           .append('text')
-          .attr('class','text-data')
+          .attr('class', 'text-data')
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
           .text(d => d.text)
@@ -247,7 +250,7 @@ export function wordPlotD3() {
       resetZoom = function () {
         zoom.scaleTo(zoomHost.transition().duration(750), 0.9);
       };
-    })
+    });
   }
 
   chart.width = function (value) {
@@ -294,9 +297,8 @@ export function wordPlotD3() {
 
   chart.tooltipFormatter = function (value) {
     if (!arguments.length) {
-      return tooltipFormatter
-    }
-    else {
+      return tooltipFormatter;
+    } else {
       if (value == null) {
         tooltipFormatter = initialConfiguration.tooltipFormatter;
       } else {

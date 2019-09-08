@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { WordPlotComponent } from './word-plot.component';
+import {WordPlotComponent} from './word-plot.component';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 
 describe('WordPlotComponent', () => {
   let component: WordPlotComponent;
@@ -8,9 +9,10 @@ describe('WordPlotComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WordPlotComponent ]
+      declarations: [WordPlotComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
