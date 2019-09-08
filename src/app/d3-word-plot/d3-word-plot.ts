@@ -22,7 +22,7 @@ export function wordPlotD3() {
     }
   };
 
-  const markers = [{text: 'EMERGENT', x: 5, y: 10}, {text: 'DOMINANT', x: 5, y: 10}];
+  const markers = [{text: 'EMERGENT', x: 5, y: 10, color:'#ef999c'}, {text: 'DOMINANT', x: 10, y: 10, color:'#cfcbd2'}];
 
   let width = initialConfiguration.width,
     height = initialConfiguration.height,
@@ -107,9 +107,12 @@ export function wordPlotD3() {
         let newYScale = d3.event.transform.rescaleY(yScale);
         gXAxis.call(xAxis.scale(newXScale));
         gYAxis.call(yAxis.scale(newYScale));
-        labelsG.selectAll('text').data(data)
+        labelsG.selectAll('.text-data').data(data)
           .attr('x', d => newXScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => newYScale(parseFloat(d[yAxisProperty])));
+        labelsG.selectAll('.text-headers').data(markers)
+          .attr('x', d => newXScale(parseFloat(d.x)))
+          .attr('y', d => newYScale(parseFloat(d.y)));
       }
 
       const zoomHost = svg.append("rect")
@@ -131,10 +134,23 @@ export function wordPlotD3() {
       const labelsG = svg.append("g")
         .attr("clip-path", "url(#clip)");
 
-      labelsG.selectAll('text')
+      labelsG.selectAll('.text-headers')
+        .data(markers)
+        .enter()
+        .append('text')
+        .attr('class', 'text-headers')
+        .attr('x', d => xScale(parseFloat(d.x)))
+        .attr('y', d => yScale(parseFloat(d.y)))
+        .style('text-anchor', 'end')
+        .attr('font-size','20')
+        .attr('fill',(d) => d.color)
+        .text(d => d.text);
+
+      labelsG.selectAll('.text-data')
         .data(data)
         .enter()
         .append('text')
+        .attr('class','text-data')
         .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
         .text(d => d.text)
@@ -179,11 +195,19 @@ export function wordPlotD3() {
         gYAxis.transition(t)
           .call(yAxis);
 
-        const updatedPoints = labelsG.selectAll('text').data(data);
+        const updatedHeaders = labelsG.selectAll('.text-headers').data(markers);
+        updatedHeaders
+          .transition()
+          .ease(d3.easeLinear)
+          .duration(750)
+          .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('y', d => yScale(parseFloat(d[yAxisProperty])));
 
+        const updatedPoints = labelsG.selectAll('.text-data').data(data);
         updatedPoints
           .enter()
           .append('text')
+          .attr('class','text-data')
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
           .text(d => d.text)
