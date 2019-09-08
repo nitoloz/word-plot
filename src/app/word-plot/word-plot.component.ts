@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {wordPlotD3} from "../d3-word-plot/d3-word-plot";
+import {AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {wordPlotD3} from "./d3-word-plot/d3-word-plot";
 import * as d3 from 'd3'
 
 @Component({
