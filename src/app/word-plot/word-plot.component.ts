@@ -4,8 +4,8 @@ import * as d3 from 'd3';
 
 
 export interface PlotData {
-  x: string | number;
-  y: string | number;
+  xCoordinate: string | number;
+  yCoordinate: string | number;
   text: string;
 }
 

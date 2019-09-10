@@ -10,14 +10,14 @@ export function wordPlotD3 () {
     width: 1000,
     height: 600,
     data: [],
-    xAxisProperty: 'x',
-    yAxisProperty: 'y',
+    xAxisProperty: 'xCoordinate',
+    yAxisProperty: 'yCoordinate',
     trellisingProperty: 'color',
     xAxisLabel: 'Pain/Symptoms',
     yAxisLabel: 'Scientific Speak',
     tooltipFormatter: (d) => {
-      return `Pain/Symptoms: ${d.x}<br>
-            Scientific Speak ${d.y}<br>
+      return `Pain/Symptoms: ${d.xCoordinate}<br>
+            Scientific Speak ${d.yCoordinate}<br>
             Name: ${d.text}<br>`;
     }
   };
@@ -36,7 +36,7 @@ export function wordPlotD3 () {
     yAxisProperty = initialConfiguration.yAxisProperty,
     trellisingProperty = initialConfiguration.trellisingProperty,
     tooltipFormatter = initialConfiguration.tooltipFormatter;
-  let updateData, zoomIn, zoomOut, resetZoom = null;
+  let updateData, zoomIn, zoomOut, resetZoom, forceNodesData = null;
 
   function chart (selection) {
     selection.each(function () {
@@ -49,6 +49,7 @@ export function wordPlotD3 () {
           d3.min([0, d3.min(xAxisValues)]),
           d3.max([0, d3.max(xAxisValues)])
         ]).range([margin.left, width - margin.right]);
+      let zoomedXScale = xScale;
 
       const yScale = d3.scaleLinear()
         .domain([
@@ -56,6 +57,7 @@ export function wordPlotD3 () {
           d3.max([d3.max(yAxisValues)])
         ])
         .range([height - margin.bottom, margin.top]);
+      let zoomedYScale = yScale;
 
       const svg = selection.append('svg')
         .attr('height', height)
@@ -103,7 +105,30 @@ export function wordPlotD3 () {
             ? false : d3.event.type === 'wheel'
               ? d3.event.ctrlKey : true;
         })
-        .on('zoom', zoomed);
+        .on('zoom', zoomed)
+        .on('end', zoomEnd);
+
+      function zoomed () {
+        zoomedXScale = d3.event.transform.rescaleX(xScale);
+        zoomedYScale = d3.event.transform.rescaleY(yScale);
+        gXAxis.call(xAxis.scale(zoomedXScale));
+        gYAxis.call(yAxis.scale(zoomedYScale));
+        // labelsG.selectAll('.text-data').data(data)
+        //   .attr('x', d => zoomedXScale(parseFloat(d[xAxisProperty])))
+        //   .attr('y', d => zoomedYScale(parseFloat(d[yAxisProperty])));
+        labelsG.selectAll('.text-headers').data(markers)
+          .attr('x', d => zoomedXScale(parseFloat(d.x)))
+          .attr('y', d => zoomedYScale(parseFloat(d.y)));
+      }
+
+
+      function zoomEnd () {
+        // zoomedXScale = d3.event.transform.rescaleX(xScale);
+        // zoomedYScale = d3.event.transform.rescaleY(yScale);
+        forceNodesData = getForceNodesData();
+        simulation.nodes(forceNodesData);
+        simulation.alpha(3).restart();
+      }
 
       const zoomHost = svg.append('rect')
         .attr('class', 'zoom-rect')
@@ -136,6 +161,8 @@ export function wordPlotD3 () {
         .attr('fill', (d) => d.color)
         .text(d => d.text);
 
+      forceNodesData = getForceNodesData();
+
       labelsG.selectAll('.text-data')
         .data(data)
         .enter()
@@ -151,17 +178,35 @@ export function wordPlotD3 () {
           tooltip.hide();
         });
 
-      function zoomed () {
-        const newXScale = d3.event.transform.rescaleX(xScale);
-        const newYScale = d3.event.transform.rescaleY(yScale);
-        gXAxis.call(xAxis.scale(newXScale));
-        gYAxis.call(yAxis.scale(newYScale));
-        labelsG.selectAll('.text-data').data(data)
-          .attr('x', d => newXScale(parseFloat(d[xAxisProperty])))
-          .attr('y', d => newYScale(parseFloat(d[yAxisProperty])));
-        labelsG.selectAll('.text-headers').data(markers)
-          .attr('x', d => newXScale(parseFloat(d.x)))
-          .attr('y', d => newYScale(parseFloat(d.y)));
+      function ticked () {
+        labelsG.selectAll('.text-data')
+          .data(forceNodesData)
+          .transition()
+          .ease(d3.easeLinear)
+          .duration(100)
+          .attr('x', function (d) {
+            return d.x;
+          })
+          .attr('y', function (d) {
+            return d.y;
+          });
+      }
+
+      const repelForce = d3.forceManyBody().strength(-300).distanceMax(100).distanceMin(10);
+      // const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
+      const simulation = d3.forceSimulation(forceNodesData)
+        .alphaDecay(0.15)
+        // .force('attractForce', attractForce)
+        .force('repelForce', repelForce)
+        .on('tick', ticked);
+
+      function getForceNodesData () {
+        return data.map(d => {
+          return Object.assign(d, {
+            x: zoomedXScale(parseFloat(d[xAxisProperty])),
+            y: zoomedYScale(parseFloat(d[yAxisProperty]))
+          });
+        });
       }
 
       // const scatterPlotLegend = stackedLegendD3()
@@ -237,6 +282,9 @@ export function wordPlotD3 () {
         svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
         svg.select('.x.axis.label').text(xAxisLabel);
         svg.select('.y.axis.label').text(yAxisLabel);
+
+        forceNodesData = getForceNodesData();
+        simulation.nodes(forceNodesData);
       };
 
       zoomIn = function () {
@@ -250,6 +298,7 @@ export function wordPlotD3 () {
       resetZoom = function () {
         zoom.scaleTo(zoomHost.transition().duration(750), 0.9);
       };
+
     });
   }
 
