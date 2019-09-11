@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {WordPlotComponent} from './word-plot/word-plot.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import {WordPlotComponent} from './word-plot/word-plot.component';
     WordPlotComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

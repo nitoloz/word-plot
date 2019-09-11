@@ -16,6 +16,10 @@ export interface PlotData {
 })
 export class WordPlotComponent implements AfterViewInit, OnChanges {
   salaryScatterChart: any;
+  settings: any = {
+    showXAxis: true,
+    showYAxis: true
+  };
   @ViewChild('chartWrapper', {static: false}) chartWrapper: ElementRef;
 
   @Input() plotData: PlotData[];
@@ -55,6 +59,18 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
   resetZoom () {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.resetZoom();
+    }
+  }
+
+  showXAxisChange () {
+    if (this.salaryScatterChart) {
+      this.salaryScatterChart.toggleXAxis();
+    }
+  }
+
+  showYAxisChange () {
+    if (this.salaryScatterChart) {
+      this.salaryScatterChart.toggleYAxis();
     }
   }
 

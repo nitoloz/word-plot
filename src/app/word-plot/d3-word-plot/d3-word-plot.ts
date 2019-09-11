@@ -36,7 +36,10 @@ export function wordPlotD3 () {
     yAxisProperty = initialConfiguration.yAxisProperty,
     trellisingProperty = initialConfiguration.trellisingProperty,
     tooltipFormatter = initialConfiguration.tooltipFormatter;
-  let updateData, zoomIn, zoomOut, resetZoom, forceNodesData = null;
+  let updateData,
+    zoomIn, zoomOut, resetZoom,
+    forceNodesData,
+    toggleXAxis, toggleYAxis = null;
 
   function chart (selection) {
     selection.each(function () {
@@ -82,8 +85,9 @@ export function wordPlotD3 () {
         .attr('transform', `translate(0,${(height - margin.top)})`)
         .call(xAxis);
 
+      Utils.appendXAxisTitle(gXAxis, width / 2, 15, xAxisLabel);
+
       const yAxis = d3.axisLeft(yScale)
-      // .tickFormat((d:any) => `EUR ${d / 1000}K`)
         .tickSize(-width + margin.left + margin.right)
         .tickSizeOuter(0);
 
@@ -92,8 +96,8 @@ export function wordPlotD3 () {
         .attr('transform', `translate(${margin.left},0)`)
         .call(yAxis);
 
-      Utils.appendXAxisTitle(gXAxis, width / 2, 15, xAxisLabel);
       Utils.appendYAxisTitle(gYAxis, -height / 2, -25, yAxisLabel);
+
       Utils.appendTitle(svg, width / 2, margin.top / 2, `${yAxisLabel} vs ${xAxisLabel}`);
 
       // Zoom setup
@@ -299,6 +303,26 @@ export function wordPlotD3 () {
         zoom.scaleTo(zoomHost.transition().duration(750), 0.9);
       };
 
+      toggleXAxis = function () {
+        const xAxisSelection = svg.select('.x.axis').selectAll('*');
+        if (xAxisSelection.empty()) {
+          gXAxis.call(xAxis.scale(zoomedXScale));
+          Utils.appendXAxisTitle(gXAxis, width / 2, 15, xAxisLabel);
+        } else {
+          xAxisSelection.remove();
+        }
+      };
+
+      toggleYAxis = function () {
+        const yAxisSelection = svg.select('.y.axis');
+        if (yAxisSelection.empty()) {
+          gYAxis.call(yAxis.scale(zoomedYScale));
+          Utils.appendYAxisTitle(gYAxis, -height / 2, -25, yAxisLabel);
+        } else {
+          yAxisSelection.selectAll('*').remove();
+        }
+      };
+
     });
   }
 
@@ -376,6 +400,16 @@ export function wordPlotD3 () {
 
   chart.resetZoom = function () {
     if (typeof resetZoom === 'function') resetZoom();
+    return chart;
+  };
+
+  chart.toggleXAxis = function () {
+    if (typeof toggleXAxis === 'function') toggleXAxis();
+    return chart;
+  };
+
+  chart.toggleYAxis = function () {
+    if (typeof toggleYAxis === 'function') toggleYAxis();
     return chart;
   };
 

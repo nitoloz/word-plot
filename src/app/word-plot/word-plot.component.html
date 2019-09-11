@@ -1,4 +1,6 @@
 <button (click)="zoomIn()">Zoom in</button>
 <button (click)="zoomOut()">Zoom out</button>
 <button (click)="resetZoom()">Reset zoom</button>
+<label><input type="checkbox" [(ngModel)]="settings.showXAxis" (change)="showXAxisChange()">Show X axis</label>
+<label><input type="checkbox" [(ngModel)]="settings.showYAxis" (change)="showYAxisChange()">Show Y axis</label>
 <div #chartWrapper></div>
