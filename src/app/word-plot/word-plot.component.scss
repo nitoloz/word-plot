@@ -34,6 +34,14 @@
   left: 0;
 }
 
-button {
+button, label {
   margin-right: 1em;
+}
+
+.chart-settings {
+  padding: 20px 0 0 100px;
+
+  div {
+    padding-bottom: 20px;
+  }
 }

@@ -39,11 +39,12 @@ export function wordPlotD3() {
   let updateData,
     zoomIn, zoomOut, resetZoom,
     forceNodesData,
-    toggleXAxis, toggleYAxis, toggleTitle = null;
+    toggleXAxis, toggleYAxis, toggleTitle, changeTicksStyle = null;
 
   let xAxisVisible = true;
   let yAxisVisible = true;
   let titleVisible = true;
+  let solidAxisTicks = true;
 
   function chart(selection) {
     selection.each(function () {
@@ -204,7 +205,7 @@ export function wordPlotD3() {
           });
       }
 
-      const repelForce = d3.forceManyBody().strength(-300).distanceMax(100).distanceMin(5);
+      const repelForce = d3.forceManyBody().strength(-150).distanceMax(100).distanceMin(0);
       // const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
       const simulation = d3.forceSimulation(forceNodesData)
         .alphaDecay(0.15)
@@ -260,7 +261,7 @@ export function wordPlotD3() {
         updatedHeaders
           .transition()
           .ease(d3.easeLinear)
-          .duration(750)
+          .duration(100)
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])));
 
@@ -306,6 +307,7 @@ export function wordPlotD3() {
 
         forceNodesData = getForceNodesData();
         simulation.nodes(forceNodesData);
+        resetZoom();
       };
 
       zoomIn = function () {
@@ -348,6 +350,15 @@ export function wordPlotD3() {
           svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
         } else {
           svg.select('.title').text(``);
+        }
+      };
+
+      changeTicksStyle = function () {
+        solidAxisTicks = !solidAxisTicks;
+        if (solidAxisTicks) {
+          svg.selectAll('.tick line').style('stroke-dasharray', null);
+        } else {
+          svg.selectAll('.tick line').style('stroke-dasharray', '5 5');
         }
       };
 
@@ -443,6 +454,11 @@ export function wordPlotD3() {
 
   chart.toggleTitle = function () {
     if (typeof toggleTitle === 'function') toggleTitle();
+    return chart;
+  };
+
+  chart.chnageTicksStyle = function () {
+    if (typeof changeTicksStyle === 'function') changeTicksStyle();
     return chart;
   };
 
