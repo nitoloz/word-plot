@@ -39,10 +39,11 @@ export function wordPlotD3() {
   let updateData,
     zoomIn, zoomOut, resetZoom,
     forceNodesData,
-    toggleXAxis, toggleYAxis = null;
+    toggleXAxis, toggleYAxis, toggleTitle = null;
 
   let xAxisVisible = true;
   let yAxisVisible = true;
+  let titleVisible = true;
 
   function chart(selection) {
     selection.each(function () {
@@ -291,9 +292,17 @@ export function wordPlotD3() {
           .duration(100)
           .remove();
 
-        svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
-        svg.select('.x.axis.label').text(xAxisLabel);
-        svg.select('.y.axis.label').text(yAxisLabel);
+        if (titleVisible) {
+          svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
+        }
+
+        if (xAxisVisible) {
+          svg.select('.x.axis.label').text(xAxisLabel);
+        }
+
+        if (yAxisVisible) {
+          svg.select('.y.axis.label').text(yAxisLabel);
+        }
 
         forceNodesData = getForceNodesData();
         simulation.nodes(forceNodesData);
@@ -330,6 +339,15 @@ export function wordPlotD3() {
           Utils.appendYAxisTitle(gYAxis, -height / 2, -25, yAxisLabel);
         } else {
           yAxisSelection.remove();
+        }
+      };
+
+      toggleTitle = function () {
+        titleVisible = !titleVisible;
+        if (titleVisible) {
+          svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
+        } else {
+          svg.select('.title').text(``);
         }
       };
 
@@ -420,6 +438,11 @@ export function wordPlotD3() {
 
   chart.toggleYAxis = function () {
     if (typeof toggleYAxis === 'function') toggleYAxis();
+    return chart;
+  };
+
+  chart.toggleTitle = function () {
+    if (typeof toggleTitle === 'function') toggleTitle();
     return chart;
   };
 

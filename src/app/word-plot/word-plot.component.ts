@@ -18,7 +18,8 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
   salaryScatterChart: any;
   settings: any = {
     showXAxis: true,
-    showYAxis: true
+    showYAxis: true,
+    showTitle: true
   };
   @ViewChild('chartWrapper', {static: false}) chartWrapper: ElementRef;
 
@@ -71,6 +72,12 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
   showYAxisChange () {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.toggleYAxis();
+    }
+  }
+
+  showTitleChange () {
+    if (this.salaryScatterChart) {
+      this.salaryScatterChart.toggleTitle();
     }
   }
 
