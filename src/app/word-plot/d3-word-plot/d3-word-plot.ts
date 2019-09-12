@@ -126,6 +126,8 @@ export function wordPlotD3() {
         if (yAxisVisible) {
           gYAxis.call(yAxis.scale(zoomedYScale));
         }
+        Utils.styleAxisTicks(svg, solidAxisTicks);
+
         // labelsG.selectAll('.text-data').data(data)
         //   .attr('x', d => zoomedXScale(parseFloat(d[xAxisProperty])))
         //   .attr('y', d => zoomedYScale(parseFloat(d[yAxisProperty])));
@@ -256,6 +258,7 @@ export function wordPlotD3() {
         if (yAxisVisible) {
           gYAxis.transition(t).call(yAxis);
         }
+        Utils.styleAxisTicks(svg, solidAxisTicks);
 
         const updatedHeaders = labelsG.selectAll('.text-headers').data(markers);
         updatedHeaders
@@ -331,6 +334,7 @@ export function wordPlotD3() {
         } else {
           xAxisSelection.remove();
         }
+        Utils.styleAxisTicks(svg, solidAxisTicks);
       };
 
       toggleYAxis = function () {
@@ -342,6 +346,7 @@ export function wordPlotD3() {
         } else {
           yAxisSelection.remove();
         }
+        Utils.styleAxisTicks(svg, solidAxisTicks);
       };
 
       toggleTitle = function () {
@@ -355,11 +360,7 @@ export function wordPlotD3() {
 
       changeTicksStyle = function () {
         solidAxisTicks = !solidAxisTicks;
-        if (solidAxisTicks) {
-          svg.selectAll('.tick line').style('stroke-dasharray', null);
-        } else {
-          svg.selectAll('.tick line').style('stroke-dasharray', '5 5');
-        }
+        Utils.styleAxisTicks(svg, solidAxisTicks);
       };
 
     });

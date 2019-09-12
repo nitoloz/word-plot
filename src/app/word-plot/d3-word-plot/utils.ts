@@ -1,6 +1,6 @@
 export class Utils {
 
-  static appendXAxisTitle (selection, x, y, text) {
+  static appendXAxisTitle(selection, x, y, text) {
     selection.append('text')
       .attr('class', 'label x axis')
       .attr('y', y)
@@ -12,7 +12,7 @@ export class Utils {
       .text(text);
   }
 
-  static appendYAxisTitle (selection, x, y, text) {
+  static appendYAxisTitle(selection, x, y, text) {
     selection.append('text')
       .attr('class', 'label y axis')
       .attr('transform', 'rotate(-90)')
@@ -25,7 +25,7 @@ export class Utils {
       .text(text);
   }
 
-  static appendTitle (selection, x, y, text) {
+  static appendTitle(selection, x, y, text) {
     selection.append('text')
       .attr('class', 'title')
       .attr('x', x)
@@ -34,5 +34,10 @@ export class Utils {
       .style('font-size', '16px')
       .style('text-decoration', 'underline')
       .text(text);
+  }
+
+  static styleAxisTicks(svg, solidAxisTicks) {
+    svg.selectAll('.tick line').style('stroke-dasharray', solidAxisTicks ? null : '5 5');
+
   }
 }
