@@ -136,7 +136,6 @@ export function wordPlotD3() {
           .attr('y', d => zoomedYScale(parseFloat(d.y)));
       }
 
-
       function zoomEnd() {
         // zoomedXScale = d3.event.transform.rescaleX(xScale);
         // zoomedYScale = d3.event.transform.rescaleY(yScale);
@@ -458,7 +457,7 @@ export function wordPlotD3() {
     return chart;
   };
 
-  chart.chnageTicksStyle = function () {
+  chart.changeTicksStyle = function () {
     if (typeof changeTicksStyle === 'function') changeTicksStyle();
     return chart;
   };

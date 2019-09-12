@@ -10,9 +10,9 @@
     <label><input type="checkbox" [(ngModel)]="settings.showTitle" (change)="showTitleChange()">Show title</label>
   </div>
   <div>
-    <label>Axis line type: </label>
-    <input type="radio" value="solid" name="gender" [ngModel]="settings.axisLineType" (change)="chnageLineType()"> Solid
-    <input type="radio" value="dashed" name="gender" [ngModel]="settings.axisLineType" (change)="chnageLineType()"> Dashed
+    <label>Grid line type: </label>
+    <input type="radio" value="solid" name="gender" [ngModel]="settings.gridLineType" (change)="chnageLineType()"> Solid
+    <input type="radio" value="dashed" name="gender" [ngModel]="settings.gridLineType" (change)="chnageLineType()"> Dashed
   </div>
 </div>
 <div #chartWrapper></div>

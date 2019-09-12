@@ -20,7 +20,7 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
     showXAxis: true,
     showYAxis: true,
     showTitle: true,
-    axisLineType: 'solid'
+    gridLineType: 'solid'
   };
   @ViewChild('chartWrapper', {static: false}) chartWrapper: ElementRef;
 
@@ -84,7 +84,7 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
 
   chnageLineType() {
     if (this.salaryScatterChart) {
-      this.salaryScatterChart.chnageTicksStyle();
+      this.salaryScatterChart.changeTicksStyle();
     }
   }
 
