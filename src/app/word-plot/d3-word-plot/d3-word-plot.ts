@@ -1,10 +1,10 @@
 import * as d3 from 'd3';
 import * as d3Tip from 'd3-tip';
-import {Utils} from './utils';
+import { Utils } from './utils';
 
 const margin = {top: 50, right: 50, bottom: 50, left: 100};
 
-export function wordPlotD3 () {
+export function wordPlotD3() {
 
   const initialConfiguration = {
     width: 1000,
@@ -41,7 +41,10 @@ export function wordPlotD3 () {
     forceNodesData,
     toggleXAxis, toggleYAxis = null;
 
-  function chart (selection) {
+  let xAxisVisible = true;
+  let yAxisVisible = true;
+
+  function chart(selection) {
     selection.each(function () {
       data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
       let yAxisValues = data.map(d => parseFloat(d[yAxisProperty]));
@@ -112,11 +115,15 @@ export function wordPlotD3 () {
         .on('zoom', zoomed)
         .on('end', zoomEnd);
 
-      function zoomed () {
+      function zoomed() {
         zoomedXScale = d3.event.transform.rescaleX(xScale);
         zoomedYScale = d3.event.transform.rescaleY(yScale);
-        gXAxis.call(xAxis.scale(zoomedXScale));
-        gYAxis.call(yAxis.scale(zoomedYScale));
+        if (xAxisVisible) {
+          gXAxis.call(xAxis.scale(zoomedXScale));
+        }
+        if (yAxisVisible) {
+          gYAxis.call(yAxis.scale(zoomedYScale));
+        }
         // labelsG.selectAll('.text-data').data(data)
         //   .attr('x', d => zoomedXScale(parseFloat(d[xAxisProperty])))
         //   .attr('y', d => zoomedYScale(parseFloat(d[yAxisProperty])));
@@ -126,7 +133,7 @@ export function wordPlotD3 () {
       }
 
 
-      function zoomEnd () {
+      function zoomEnd() {
         // zoomedXScale = d3.event.transform.rescaleX(xScale);
         // zoomedYScale = d3.event.transform.rescaleY(yScale);
         forceNodesData = getForceNodesData();
@@ -182,7 +189,7 @@ export function wordPlotD3 () {
           tooltip.hide();
         });
 
-      function ticked () {
+      function ticked() {
         labelsG.selectAll('.text-data')
           .data(forceNodesData)
           .transition()
@@ -196,7 +203,7 @@ export function wordPlotD3 () {
           });
       }
 
-      const repelForce = d3.forceManyBody().strength(-300).distanceMax(100).distanceMin(10);
+      const repelForce = d3.forceManyBody().strength(-300).distanceMax(100).distanceMin(5);
       // const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
       const simulation = d3.forceSimulation(forceNodesData)
         .alphaDecay(0.15)
@@ -204,7 +211,7 @@ export function wordPlotD3 () {
         .force('repelForce', repelForce)
         .on('tick', ticked);
 
-      function getForceNodesData () {
+      function getForceNodesData() {
         return data.map(d => {
           return Object.assign(d, {
             x: zoomedXScale(parseFloat(d[xAxisProperty])),
@@ -238,14 +245,15 @@ export function wordPlotD3 () {
 
         yAxis.scale(yScale);
 
-        const t = d3.transition()
-          .duration(750);
+        const t = d3.transition().duration(750);
 
-        gXAxis.transition(t)
-          .call(xAxis);
+        if (xAxisVisible) {
+          gXAxis.transition(t).call(xAxis);
+        }
 
-        gYAxis.transition(t)
-          .call(yAxis);
+        if (yAxisVisible) {
+          gYAxis.transition(t).call(yAxis);
+        }
 
         const updatedHeaders = labelsG.selectAll('.text-headers').data(markers);
         updatedHeaders
@@ -304,6 +312,7 @@ export function wordPlotD3 () {
       };
 
       toggleXAxis = function () {
+        xAxisVisible = !xAxisVisible;
         const xAxisSelection = svg.select('.x.axis').selectAll('*');
         if (xAxisSelection.empty()) {
           gXAxis.call(xAxis.scale(zoomedXScale));
@@ -314,12 +323,13 @@ export function wordPlotD3 () {
       };
 
       toggleYAxis = function () {
-        const yAxisSelection = svg.select('.y.axis');
+        yAxisVisible = !yAxisVisible;
+        const yAxisSelection = svg.select('.y.axis').selectAll('*');
         if (yAxisSelection.empty()) {
           gYAxis.call(yAxis.scale(zoomedYScale));
           Utils.appendYAxisTitle(gYAxis, -height / 2, -25, yAxisLabel);
         } else {
-          yAxisSelection.selectAll('*').remove();
+          yAxisSelection.remove();
         }
       };
 
