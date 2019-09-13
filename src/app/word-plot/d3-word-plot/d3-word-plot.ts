@@ -130,17 +130,22 @@ export function wordPlotD3() {
         Utils.changeXAxisGridVisibility(svg, xAxisGridVisible);
         Utils.changeYAxisGridVisibility(svg, yAxisGridVisible);
 
-        // labelsG.selectAll('.text-data').data(data)
-        //   .attr('x', d => zoomedXScale(parseFloat(d[xAxisProperty])))
-        //   .attr('y', d => zoomedYScale(parseFloat(d[yAxisProperty])));
+        labelsG.selectAll('.text-data-nodes').data(data)
+          .attr('cx', d => zoomedXScale(parseFloat(d[xAxisProperty])))
+          .attr('cy', d => zoomedYScale(parseFloat(d[yAxisProperty])));
+
+        labelsG.selectAll('.link').data(data)
+          .attr('x1', d => zoomedXScale(parseFloat(d[xAxisProperty])))
+          .attr('y1', d => zoomedYScale(parseFloat(d[yAxisProperty])));
+          // .attr('x2', d => zoomedXScale(parseFloat(d[xAxisProperty])) + 27)
+          // .attr('y2', d => zoomedYScale(parseFloat(d[yAxisProperty])) + 27);
+
         labelsG.selectAll('.text-headers').data(markers)
           .attr('x', d => zoomedXScale(parseFloat(d.x)))
           .attr('y', d => zoomedYScale(parseFloat(d.y)));
       }
 
       function zoomEnd() {
-        // zoomedXScale = d3.event.transform.rescaleX(xScale);
-        // zoomedYScale = d3.event.transform.rescaleY(yScale);
         forceNodesData = getForceNodesData();
         simulation.nodes(forceNodesData);
         simulation.alpha(3).restart();
@@ -194,6 +199,41 @@ export function wordPlotD3() {
           tooltip.hide();
         });
 
+      labelsG.selectAll('.text-data-nodes')
+        .data(data)
+        .enter()
+        .append('circle')
+        .attr('class', 'text-data-nodes')
+        .attr('cx', d => xScale(parseFloat(d[xAxisProperty])))
+        .attr('cy', d => yScale(parseFloat(d[yAxisProperty])))
+        .attr('r', 2);
+
+      labelsG.selectAll('.link')
+        .data(data)
+        .enter()
+        .append('line')
+        .attr('class', 'link')
+        .attr('x1', d => xScale(parseFloat(d[xAxisProperty])))
+        .attr('y1', d => yScale(parseFloat(d[yAxisProperty])))
+        .attr('x2', d => xScale(parseFloat(d[xAxisProperty])))
+        .attr('y2', d => yScale(parseFloat(d[yAxisProperty])))
+        .attr('stroke-width', 0.6)
+        .attr('stroke', 'gray');
+      // .attr("id", function (d) {
+      //   // d.textId = "text" + d.id;
+      //   // d.lineId = "line" + d.id;
+      //   return"line" + d.id;
+      // });
+
+      const repelForce = d3.forceManyBody().strength(-120).distanceMax(100).distanceMin(0);
+      const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
+      const simulation = d3.forceSimulation(forceNodesData)
+        .alphaDecay(0.15)
+        .force('attractForce', attractForce)
+        .force('repelForce', repelForce)
+        .on('tick', ticked)
+        .on('end', simulationEnd);
+
       function ticked() {
         labelsG.selectAll('.text-data')
           .data(forceNodesData)
@@ -206,15 +246,28 @@ export function wordPlotD3() {
           .attr('y', function (d) {
             return d.y;
           });
+
+        labelsG.selectAll('.link').data(forceNodesData)
+          .attr('x1', d => zoomedXScale(parseFloat(d.xCoordinate)))
+          .attr('y1', d => zoomedYScale(parseFloat(d.yCoordinate)))
+          .attr('x2', d => d.x)
+          .attr('y2', d => d.y);
+
       }
 
-      const repelForce = d3.forceManyBody().strength(-150).distanceMax(100).distanceMin(0);
-      // const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
-      const simulation = d3.forceSimulation(forceNodesData)
-        .alphaDecay(0.15)
-        // .force('attractForce', attractForce)
-        .force('repelForce', repelForce)
-        .on('tick', ticked);
+      function simulationEnd() {
+        // labelsG.selectAll('.text-data')
+        //   .data(forceNodesData)
+        //   .transition()
+        //   .ease(d3.easeLinear)
+        //   .duration(100)
+        //   .attr('x', function (d) {
+        //     return d.x;
+        //   })
+        //   .attr('y', function (d) {
+        //     return d.y;
+        //   });
+      }
 
       function getForceNodesData() {
         return data.map(d => {
@@ -225,13 +278,6 @@ export function wordPlotD3() {
         });
       }
 
-      // const scatterPlotLegend = stackedLegendD3()
-      //     .colorScale(colorScale)
-      //     .data(colorScale.domain());
-      //
-      // svg.append('g')
-      //     .attr('transform', `translate(${width - 120}, 0)`)
-      //     .call(scatterPlotLegend);
 
       updateData = function () {
         data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
@@ -271,8 +317,10 @@ export function wordPlotD3() {
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])));
 
-        const updatedPoints = labelsG.selectAll('.text-data').data(data);
-        updatedPoints
+        const updatedTextData = labelsG.selectAll('.text-data').data(data);
+        const updatedNodesData = labelsG.selectAll('.text-data-nodes').data(data);
+        const updatedLinksData = labelsG.selectAll('.link').data(data);
+        updatedTextData
           .enter()
           .append('text')
           .attr('class', 'text-data')
@@ -286,14 +334,60 @@ export function wordPlotD3() {
             tooltip.hide();
           });
 
-        updatedPoints
+        updatedNodesData
+          .enter()
+          .append('circle')
+          .attr('class', 'text-data-nodes')
+          .attr('cx', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('cy', d => yScale(parseFloat(d[yAxisProperty])))
+          .attr('r', 2);
+
+        updatedLinksData
+          .enter()
+          .append('line')
+          .attr('class', 'link')
+          .attr('x1', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('y1', d => yScale(parseFloat(d[yAxisProperty])))
+          .attr('x2', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('y2', d => yScale(parseFloat(d[yAxisProperty])));
+
+        updatedTextData
           .transition()
           .ease(d3.easeLinear)
           .duration(750)
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])));
 
-        updatedPoints.exit()
+        updatedNodesData
+          .transition()
+          .ease(d3.easeLinear)
+          .duration(750)
+          .attr('cx', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('cy', d => yScale(parseFloat(d[yAxisProperty])));
+
+        updatedLinksData
+          .transition()
+          .ease(d3.easeLinear)
+          .duration(750)
+          .attr('class', 'link')
+          .attr('x1', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('y1', d => yScale(parseFloat(d[yAxisProperty])))
+          .attr('x2', d => xScale(parseFloat(d[xAxisProperty])))
+          .attr('y2', d => yScale(parseFloat(d[yAxisProperty])));
+
+        updatedTextData.exit()
+          .transition()
+          .ease(d3.easeLinear)
+          .duration(100)
+          .remove();
+
+        updatedNodesData.exit()
+          .transition()
+          .ease(d3.easeLinear)
+          .duration(100)
+          .remove();
+
+        updatedLinksData.exit()
           .transition()
           .ease(d3.easeLinear)
           .duration(100)
