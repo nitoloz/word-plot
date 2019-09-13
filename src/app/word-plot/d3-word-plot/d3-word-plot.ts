@@ -1,10 +1,10 @@
 import * as d3 from 'd3';
 import * as d3Tip from 'd3-tip';
-import { Utils } from './utils';
+import {Utils} from './utils';
 
 const margin = {top: 50, right: 50, bottom: 50, left: 100};
 
-export function wordPlotD3() {
+export function wordPlotD3 () {
 
   const initialConfiguration = {
     width: 1000,
@@ -52,7 +52,7 @@ export function wordPlotD3() {
   let medianVisible = true;
   let solidAxisTicks = true;
 
-  function chart(selection) {
+  function chart (selection) {
     selection.each(function () {
       data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
       let yAxisValues = data.map(d => parseFloat(d[yAxisProperty]));
@@ -107,7 +107,7 @@ export function wordPlotD3() {
         .attr('transform', `translate(${margin.left},0)`)
         .call(yAxis);
 
-      Utils.appendYAxisTitle(gYAxis, -height / 2, -25, yAxisLabel);
+      Utils.appendYAxisTitle(gYAxis, -height / 2, -35, yAxisLabel);
 
       Utils.appendTitle(svg, width / 2, margin.top / 2, `${yAxisLabel} vs ${xAxisLabel}`);
 
@@ -123,7 +123,7 @@ export function wordPlotD3() {
         .on('zoom', zoomed)
         .on('end', zoomEnd);
 
-      function zoomed() {
+      function zoomed () {
         zoomedXScale = d3.event.transform.rescaleX(xScale);
         zoomedYScale = d3.event.transform.rescaleY(yScale);
         if (xAxisGridVisible) {
@@ -136,6 +136,14 @@ export function wordPlotD3() {
         Utils.changeXAxisGridVisibility(svg, xAxisGridVisible);
         Utils.changeYAxisGridVisibility(svg, yAxisGridVisible);
 
+        svg.select('.vertical-median')
+          .attr('x1', zoomedXScale(5))
+          .attr('x2', zoomedXScale(5));
+
+        svg.select('.horizontal-median')
+          .attr('y1', zoomedYScale(5))
+          .attr('y2', zoomedYScale(5));
+
         labelsG.selectAll('.text-data-nodes').data(data)
           .attr('cx', d => zoomedXScale(parseFloat(d[xAxisProperty])))
           .attr('cy', d => zoomedYScale(parseFloat(d[yAxisProperty])));
@@ -147,17 +155,9 @@ export function wordPlotD3() {
         labelsG.selectAll('.text-headers').data(markers)
           .attr('x', d => zoomedXScale(parseFloat(d.x)))
           .attr('y', d => zoomedYScale(parseFloat(d.y)));
-
-        svg.select('.vertical-median')
-          .attr('x1', zoomedXScale(5))
-          .attr('x2', zoomedXScale(5));
-
-        svg.select('.horizontal-median')
-          .attr('y1', zoomedYScale(5))
-          .attr('y2', zoomedYScale(5));
       }
 
-      function zoomEnd() {
+      function zoomEnd () {
         forceNodesData = getForceNodesData();
         simulation.nodes(forceNodesData);
         simulation.alpha(3).restart();
@@ -178,6 +178,9 @@ export function wordPlotD3() {
         .html(tooltipFormatter);
 
       svg.call(tooltip);
+
+      Utils.appendLine(svg, xScale(5), height - margin.bottom, xScale(5), margin.top, 'vertical-median');
+      Utils.appendLine(svg, width - margin.right, yScale(5), margin.left, yScale(5), 'horizontal-median');
 
       const labelsG = svg.append('g')
         .attr('clip-path', 'url(#clip)');
@@ -233,9 +236,6 @@ export function wordPlotD3() {
         .attr('stroke-width', 0.6)
         .attr('stroke', 'gray');
 
-      Utils.appendLine(svg, xScale(5), height - margin.bottom, xScale(5), margin.top, 'vertical-median');
-      Utils.appendLine(svg, width - margin.right, yScale(5), margin.left, yScale(5), 'horizontal-median');
-
       const repelForce = d3.forceManyBody().strength(-120).distanceMax(100).distanceMin(0);
       const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
       const simulation = d3.forceSimulation(forceNodesData)
@@ -244,7 +244,7 @@ export function wordPlotD3() {
         .force('repelForce', repelForce)
         .on('tick', ticked);
 
-      function ticked() {
+      function ticked () {
         labelsG.selectAll('.text-data')
           .data(forceNodesData)
           .transition()
@@ -262,10 +262,9 @@ export function wordPlotD3() {
           .attr('y1', d => zoomedYScale(parseFloat(d.yCoordinate)))
           .attr('x2', d => d.x)
           .attr('y2', d => d.y);
-
       }
 
-      function getForceNodesData() {
+      function getForceNodesData () {
         return data.map(d => {
           return Object.assign(d, {
             x: zoomedXScale(parseFloat(d[xAxisProperty])),
@@ -273,7 +272,6 @@ export function wordPlotD3() {
           });
         });
       }
-
 
       updateData = function () {
         data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
@@ -444,9 +442,11 @@ export function wordPlotD3() {
       toggleMedians = function () {
         medianVisible = !medianVisible;
         if (medianVisible) {
-          svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
+          svg.select('.vertical-median').attr('stroke', 'lightgray');
+          svg.select('.horizontal-median').attr('stroke', 'lightgray');
         } else {
-          svg.select('.title').text(``);
+          svg.select('.vertical-median').attr('stroke', null);
+          svg.select('.horizontal-median').attr('stroke', null);
         }
       };
 
