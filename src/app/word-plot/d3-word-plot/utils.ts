@@ -38,6 +38,15 @@ export class Utils {
 
   static styleAxisTicks(svg, solidAxisTicks) {
     svg.selectAll('.tick line').style('stroke-dasharray', solidAxisTicks ? null : '5 5');
-
   }
+
+  static changeYAxisGridVisibility(svg, yAxisGridVisible) {
+    svg.select('.y.axis')
+      .selectAll('.tick line')
+      .attr('stroke', yAxisGridVisible ? 'rgba(0, 0, 0, 0.1)' : null)  }
+
+  static changeXAxisGridVisibility(svg, xAxisGridVisible) {
+    svg.select('.x.axis')
+      .selectAll('.tick line')
+      .attr('stroke', xAxisGridVisible ? 'rgba(0, 0, 0, 0.1)' : null)  }
 }

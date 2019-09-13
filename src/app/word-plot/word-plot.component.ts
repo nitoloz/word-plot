@@ -17,8 +17,8 @@ export interface PlotData {
 export class WordPlotComponent implements AfterViewInit, OnChanges {
   salaryScatterChart: any;
   settings: any = {
-    showXAxis: true,
-    showYAxis: true,
+    showXAxisGrid: true,
+    showYAxisGrid: true,
     showTitle: true,
     gridLineType: 'solid'
   };
@@ -64,15 +64,15 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  showXAxisChange() {
+  showXAxisGridChange() {
     if (this.salaryScatterChart) {
-      this.salaryScatterChart.toggleXAxis();
+      this.salaryScatterChart.toggleXAxisGrid();
     }
   }
 
-  showYAxisChange() {
+  showYAxisGridChange() {
     if (this.salaryScatterChart) {
-      this.salaryScatterChart.toggleYAxis();
+      this.salaryScatterChart.toggleYAxisGrid();
     }
   }
 

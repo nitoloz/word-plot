@@ -39,10 +39,10 @@ export function wordPlotD3() {
   let updateData,
     zoomIn, zoomOut, resetZoom,
     forceNodesData,
-    toggleXAxis, toggleYAxis, toggleTitle, changeTicksStyle = null;
+    toggleXAxisGrid, toggleYAxisGrid, toggleTitle, changeTicksStyle = null;
 
-  let xAxisVisible = true;
-  let yAxisVisible = true;
+  let xAxisGridVisible = true;
+  let yAxisGridVisible = true;
   let titleVisible = true;
   let solidAxisTicks = true;
 
@@ -120,13 +120,15 @@ export function wordPlotD3() {
       function zoomed() {
         zoomedXScale = d3.event.transform.rescaleX(xScale);
         zoomedYScale = d3.event.transform.rescaleY(yScale);
-        if (xAxisVisible) {
+        if (xAxisGridVisible) {
           gXAxis.call(xAxis.scale(zoomedXScale));
         }
-        if (yAxisVisible) {
+        if (yAxisGridVisible) {
           gYAxis.call(yAxis.scale(zoomedYScale));
         }
         Utils.styleAxisTicks(svg, solidAxisTicks);
+        Utils.changeXAxisGridVisibility(svg, xAxisGridVisible);
+        Utils.changeYAxisGridVisibility(svg, yAxisGridVisible);
 
         // labelsG.selectAll('.text-data').data(data)
         //   .attr('x', d => zoomedXScale(parseFloat(d[xAxisProperty])))
@@ -250,14 +252,16 @@ export function wordPlotD3() {
 
         const t = d3.transition().duration(750);
 
-        if (xAxisVisible) {
+        if (xAxisGridVisible) {
           gXAxis.transition(t).call(xAxis);
         }
 
-        if (yAxisVisible) {
+        if (yAxisGridVisible) {
           gYAxis.transition(t).call(yAxis);
         }
         Utils.styleAxisTicks(svg, solidAxisTicks);
+        Utils.changeXAxisGridVisibility(svg, xAxisGridVisible);
+        Utils.changeYAxisGridVisibility(svg, yAxisGridVisible);
 
         const updatedHeaders = labelsG.selectAll('.text-headers').data(markers);
         updatedHeaders
@@ -299,11 +303,11 @@ export function wordPlotD3() {
           svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
         }
 
-        if (xAxisVisible) {
+        if (xAxisGridVisible) {
           svg.select('.x.axis.label').text(xAxisLabel);
         }
 
-        if (yAxisVisible) {
+        if (yAxisGridVisible) {
           svg.select('.y.axis.label').text(yAxisLabel);
         }
 
@@ -324,28 +328,14 @@ export function wordPlotD3() {
         zoom.scaleTo(zoomHost.transition().duration(750), 0.9);
       };
 
-      toggleXAxis = function () {
-        xAxisVisible = !xAxisVisible;
-        const xAxisSelection = svg.select('.x.axis').selectAll('*');
-        if (xAxisSelection.empty()) {
-          gXAxis.call(xAxis.scale(zoomedXScale));
-          Utils.appendXAxisTitle(gXAxis, width / 2, 15, xAxisLabel);
-        } else {
-          xAxisSelection.remove();
-        }
-        Utils.styleAxisTicks(svg, solidAxisTicks);
+      toggleXAxisGrid = function () {
+        xAxisGridVisible = !xAxisGridVisible;
+        Utils.changeXAxisGridVisibility(svg, xAxisGridVisible);
       };
 
-      toggleYAxis = function () {
-        yAxisVisible = !yAxisVisible;
-        const yAxisSelection = svg.select('.y.axis').selectAll('*');
-        if (yAxisSelection.empty()) {
-          gYAxis.call(yAxis.scale(zoomedYScale));
-          Utils.appendYAxisTitle(gYAxis, -height / 2, -25, yAxisLabel);
-        } else {
-          yAxisSelection.remove();
-        }
-        Utils.styleAxisTicks(svg, solidAxisTicks);
+      toggleYAxisGrid = function () {
+        yAxisGridVisible = !yAxisGridVisible;
+        Utils.changeYAxisGridVisibility(svg, yAxisGridVisible);
       };
 
       toggleTitle = function () {
@@ -442,13 +432,13 @@ export function wordPlotD3() {
     return chart;
   };
 
-  chart.toggleXAxis = function () {
-    if (typeof toggleXAxis === 'function') toggleXAxis();
+  chart.toggleXAxisGrid = function () {
+    if (typeof toggleYAxisGrid === 'function') toggleYAxisGrid();
     return chart;
   };
 
-  chart.toggleYAxis = function () {
-    if (typeof toggleYAxis === 'function') toggleYAxis();
+  chart.toggleYAxisGrid = function () {
+    if (typeof toggleYAxisGrid === 'function') toggleYAxisGrid();
     return chart;
   };
 
