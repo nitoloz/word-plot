@@ -9,6 +9,7 @@ export function wordPlotD3 () {
   const initialConfiguration = {
     width: 1000,
     height: 600,
+    textFontSize: 15,
     data: [],
     xAxisProperty: 'xCoordinate',
     yAxisProperty: 'yCoordinate',
@@ -40,11 +41,13 @@ export function wordPlotD3 () {
     xAxisProperty = initialConfiguration.xAxisProperty,
     yAxisProperty = initialConfiguration.yAxisProperty,
     trellisingProperty = initialConfiguration.trellisingProperty,
+    textFontSize = initialConfiguration.textFontSize,
     tooltipFormatter = initialConfiguration.tooltipFormatter;
   let updateData,
     zoomIn, zoomOut, resetZoom,
     forceNodesData,
-    toggleXAxisGrid, toggleYAxisGrid, toggleTitle, toggleMedians, changeTicksStyle = null;
+    toggleXAxisGrid, toggleYAxisGrid, toggleTitle,
+    toggleMedians, changeTicksStyle, changeTextFontSize = null;
 
   let xAxisGridVisible = true;
   let yAxisGridVisible = true;
@@ -206,6 +209,7 @@ export function wordPlotD3 () {
         .attr('class', 'text-data')
         .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
+        .attr('font-size', textFontSize)
         .text(d => d.text)
         .on('mouseover', function (d) {
           tooltip.show(d, this);
@@ -320,6 +324,7 @@ export function wordPlotD3 () {
           .attr('class', 'text-data')
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
+          .attr('font-size', textFontSize)
           .text(d => d.text)
           .on('mouseover', function (d) {
             tooltip.show(d, this);
@@ -455,6 +460,10 @@ export function wordPlotD3 () {
         Utils.styleAxisTicks(svg, solidAxisTicks);
       };
 
+      changeTextFontSize = function () {
+        labelsG.selectAll('.text-data')
+          .attr('font-size', textFontSize);
+      };
     });
   }
 
@@ -497,6 +506,12 @@ export function wordPlotD3 () {
   chart.trellisingProperty = function (value) {
     if (!arguments.length) return trellisingProperty;
     trellisingProperty = value;
+    return chart;
+  };
+
+  chart.textFontSize = function (value) {
+    if (!arguments.length) return textFontSize;
+    textFontSize = value;
     return chart;
   };
 
@@ -557,6 +572,12 @@ export function wordPlotD3 () {
 
   chart.changeTicksStyle = function () {
     if (typeof changeTicksStyle === 'function') changeTicksStyle();
+    return chart;
+  };
+
+  chart.changeTextFontSize = function (value) {
+    textFontSize = value;
+    if (typeof changeTextFontSize === 'function') changeTextFontSize();
     return chart;
   };
 

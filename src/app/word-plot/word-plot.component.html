@@ -15,5 +15,9 @@
     <input type="radio" value="solid" name="gender" [ngModel]="settings.gridLineType" (change)="chnageLineType()"> Solid
     <input type="radio" value="dashed" name="gender" [ngModel]="settings.gridLineType" (change)="chnageLineType()"> Dashed
   </div>
+  <div>
+    <label>Font size: </label>
+    <input type="number" value="15" [(ngModel)]="settings.textFontSize" (change)="chnageTextFontSize()">
+  </div>
 </div>
 <div #chartWrapper></div>
