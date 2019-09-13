@@ -39,11 +39,12 @@ export function wordPlotD3() {
   let updateData,
     zoomIn, zoomOut, resetZoom,
     forceNodesData,
-    toggleXAxisGrid, toggleYAxisGrid, toggleTitle, changeTicksStyle = null;
+    toggleXAxisGrid, toggleYAxisGrid, toggleTitle, toggleMedians, changeTicksStyle = null;
 
   let xAxisGridVisible = true;
   let yAxisGridVisible = true;
   let titleVisible = true;
+  let medianVisible = true;
   let solidAxisTicks = true;
 
   function chart(selection) {
@@ -137,8 +138,8 @@ export function wordPlotD3() {
         labelsG.selectAll('.link').data(data)
           .attr('x1', d => zoomedXScale(parseFloat(d[xAxisProperty])))
           .attr('y1', d => zoomedYScale(parseFloat(d[yAxisProperty])));
-          // .attr('x2', d => zoomedXScale(parseFloat(d[xAxisProperty])) + 27)
-          // .attr('y2', d => zoomedYScale(parseFloat(d[yAxisProperty])) + 27);
+        // .attr('x2', d => zoomedXScale(parseFloat(d[xAxisProperty])) + 27)
+        // .attr('y2', d => zoomedYScale(parseFloat(d[yAxisProperty])) + 27);
 
         labelsG.selectAll('.text-headers').data(markers)
           .attr('x', d => zoomedXScale(parseFloat(d.x)))
@@ -206,7 +207,8 @@ export function wordPlotD3() {
         .attr('class', 'text-data-nodes')
         .attr('cx', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('cy', d => yScale(parseFloat(d[yAxisProperty])))
-        .attr('r', 2);
+        .attr('r', 2)
+        .attr('fill', 'gray');
 
       labelsG.selectAll('.link')
         .data(data)
@@ -219,11 +221,6 @@ export function wordPlotD3() {
         .attr('y2', d => yScale(parseFloat(d[yAxisProperty])))
         .attr('stroke-width', 0.6)
         .attr('stroke', 'gray');
-      // .attr("id", function (d) {
-      //   // d.textId = "text" + d.id;
-      //   // d.lineId = "line" + d.id;
-      //   return"line" + d.id;
-      // });
 
       const repelForce = d3.forceManyBody().strength(-120).distanceMax(100).distanceMin(0);
       const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
@@ -231,8 +228,7 @@ export function wordPlotD3() {
         .alphaDecay(0.15)
         .force('attractForce', attractForce)
         .force('repelForce', repelForce)
-        .on('tick', ticked)
-        .on('end', simulationEnd);
+        .on('tick', ticked);
 
       function ticked() {
         labelsG.selectAll('.text-data')
@@ -253,20 +249,6 @@ export function wordPlotD3() {
           .attr('x2', d => d.x)
           .attr('y2', d => d.y);
 
-      }
-
-      function simulationEnd() {
-        // labelsG.selectAll('.text-data')
-        //   .data(forceNodesData)
-        //   .transition()
-        //   .ease(d3.easeLinear)
-        //   .duration(100)
-        //   .attr('x', function (d) {
-        //     return d.x;
-        //   })
-        //   .attr('y', function (d) {
-        //     return d.y;
-        //   });
       }
 
       function getForceNodesData() {
@@ -340,7 +322,9 @@ export function wordPlotD3() {
           .attr('class', 'text-data-nodes')
           .attr('cx', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('cy', d => yScale(parseFloat(d[yAxisProperty])))
-          .attr('r', 2);
+          .attr('r', 2)
+          .attr('fill', 'gray');
+
 
         updatedLinksData
           .enter()
@@ -349,7 +333,9 @@ export function wordPlotD3() {
           .attr('x1', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y1', d => yScale(parseFloat(d[yAxisProperty])))
           .attr('x2', d => xScale(parseFloat(d[xAxisProperty])))
-          .attr('y2', d => yScale(parseFloat(d[yAxisProperty])));
+          .attr('y2', d => yScale(parseFloat(d[yAxisProperty])))
+          .attr('stroke-width', 0.6)
+          .attr('stroke', 'gray');
 
         updatedTextData
           .transition()
@@ -435,6 +421,15 @@ export function wordPlotD3() {
       toggleTitle = function () {
         titleVisible = !titleVisible;
         if (titleVisible) {
+          svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
+        } else {
+          svg.select('.title').text(``);
+        }
+      };
+
+      toggleMedians = function () {
+        medianVisible = !medianVisible;
+        if (medianVisible) {
           svg.select('.title').text(`${yAxisLabel} vs ${xAxisLabel}`);
         } else {
           svg.select('.title').text(``);
@@ -527,7 +522,7 @@ export function wordPlotD3() {
   };
 
   chart.toggleXAxisGrid = function () {
-    if (typeof toggleYAxisGrid === 'function') toggleYAxisGrid();
+    if (typeof toggleXAxisGrid === 'function') toggleXAxisGrid();
     return chart;
   };
 
@@ -538,6 +533,11 @@ export function wordPlotD3() {
 
   chart.toggleTitle = function () {
     if (typeof toggleTitle === 'function') toggleTitle();
+    return chart;
+  };
+
+  chart.toggleMedians = function () {
+    if (typeof toggleMedians === 'function') toggleMedians();
     return chart;
   };
 

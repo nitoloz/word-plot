@@ -19,6 +19,7 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
   settings: any = {
     showXAxisGrid: true,
     showYAxisGrid: true,
+    showMedianLines: true,
     showTitle: true,
     gridLineType: 'solid'
   };
@@ -79,6 +80,12 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
   showTitleChange() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.toggleTitle();
+    }
+  }
+
+  showMedianChange() {
+    if (this.salaryScatterChart) {
+      this.salaryScatterChart.toggleMedians();
     }
   }
 

@@ -33,7 +33,7 @@ export class AppComponent {
     {xCoordinate: '9.1', yCoordinate: '1.9', text: 'aging_eye'},
     {xCoordinate: '4', yCoordinate: '7', text: 'macular_edema'},
     {xCoordinate: '6', yCoordinate: '9', text: 'pterygium'},
-    {xCoordinate: '4', yCoordinate: '5', text: 'macular_degeneration'},
+    {xCoordinate: '2', yCoordinate: '5', text: 'macular_degeneration'},
     {xCoordinate: '2', yCoordinate: '7.3', text: 'bad_vision'}
   ];
 
