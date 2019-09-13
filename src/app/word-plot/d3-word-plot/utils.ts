@@ -36,6 +36,17 @@ export class Utils {
       .text(text);
   }
 
+  static appendLine(selection, x1, y1, x2, y2, lineClass) {
+    selection.append('line')
+      .attr('class', lineClass)
+      .attr('x1', x1)
+      .attr('y1', y1)
+      .attr('x2', x2)
+      .attr('y2', y2)
+      .attr('stroke-width', 2)
+      .attr('stroke', 'lightgray');
+  }
+
   static styleAxisTicks(svg, solidAxisTicks) {
     svg.selectAll('.tick line').style('stroke-dasharray', solidAxisTicks ? null : '5 5');
   }
@@ -43,10 +54,12 @@ export class Utils {
   static changeYAxisGridVisibility(svg, yAxisGridVisible) {
     svg.select('.y.axis')
       .selectAll('.tick line')
-      .attr('stroke', yAxisGridVisible ? 'rgba(0, 0, 0, 0.1)' : null)  }
+      .attr('stroke', yAxisGridVisible ? 'rgba(0, 0, 0, 0.1)' : null)
+  }
 
   static changeXAxisGridVisibility(svg, xAxisGridVisible) {
     svg.select('.x.axis')
       .selectAll('.tick line')
-      .attr('stroke', xAxisGridVisible ? 'rgba(0, 0, 0, 0.1)' : null)  }
+      .attr('stroke', xAxisGridVisible ? 'rgba(0, 0, 0, 0.1)' : null)
+  }
 }

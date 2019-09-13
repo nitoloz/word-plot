@@ -27,6 +27,11 @@ export function wordPlotD3() {
     {text: 'DOMINANT', x: 10, y: 10, color: '#cfcbd2'}
   ];
 
+  const medians = [
+    {text: 'EMERGENT', x: 5, y: 10, color: '#ef999c'},
+    {text: 'DOMINANT', x: 10, y: 10, color: '#cfcbd2'}
+  ];
+
   let width = initialConfiguration.width,
     height = initialConfiguration.height,
     data = initialConfiguration.data,
@@ -138,12 +143,18 @@ export function wordPlotD3() {
         labelsG.selectAll('.link').data(data)
           .attr('x1', d => zoomedXScale(parseFloat(d[xAxisProperty])))
           .attr('y1', d => zoomedYScale(parseFloat(d[yAxisProperty])));
-        // .attr('x2', d => zoomedXScale(parseFloat(d[xAxisProperty])) + 27)
-        // .attr('y2', d => zoomedYScale(parseFloat(d[yAxisProperty])) + 27);
 
         labelsG.selectAll('.text-headers').data(markers)
           .attr('x', d => zoomedXScale(parseFloat(d.x)))
           .attr('y', d => zoomedYScale(parseFloat(d.y)));
+
+        svg.select('.vertical-median')
+          .attr('x1', zoomedXScale(5))
+          .attr('x2', zoomedXScale(5));
+
+        svg.select('.horizontal-median')
+          .attr('y1', zoomedYScale(5))
+          .attr('y2', zoomedYScale(5));
       }
 
       function zoomEnd() {
@@ -221,6 +232,9 @@ export function wordPlotD3() {
         .attr('y2', d => yScale(parseFloat(d[yAxisProperty])))
         .attr('stroke-width', 0.6)
         .attr('stroke', 'gray');
+
+      Utils.appendLine(svg, xScale(5), height - margin.bottom, xScale(5), margin.top, 'vertical-median');
+      Utils.appendLine(svg, width - margin.right, yScale(5), margin.left, yScale(5), 'horizontal-median');
 
       const repelForce = d3.forceManyBody().strength(-120).distanceMax(100).distanceMin(0);
       const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
