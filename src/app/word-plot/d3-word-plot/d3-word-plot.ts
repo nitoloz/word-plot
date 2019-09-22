@@ -359,7 +359,8 @@ export function wordPlotD3 () {
           .ease(d3.easeLinear)
           .duration(750)
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
-          .attr('y', d => yScale(parseFloat(d[yAxisProperty])));
+          .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
+          .text(d => d.text);
 
         updatedNodesData
           .transition()
