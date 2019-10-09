@@ -207,6 +207,7 @@ export function wordPlotD3 () {
         .enter()
         .append('text')
         .attr('class', 'text-data')
+        .attr('id', d => `${d.text.replace(/ /g, '_')}_label`)
         .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
         .attr('font-size', textFontSize)
@@ -217,6 +218,33 @@ export function wordPlotD3 () {
         .on('mouseout', function () {
           tooltip.hide();
         });
+
+      const dragHandler = d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended);
+
+      function dragged (d) {
+        d3.select(this)
+          .attr('x', d3.event.x)
+          .attr('y', d3.event.y);
+
+        const id = d3.select(this).attr('id').slice(0, -6);
+
+        d3.select(`#${id}_link`)
+          .attr('x2', d3.event.x)
+          .attr('y2', d3.event.y);
+      }
+
+      function dragstarted (d) {
+        d3.select(this).style('cursor', 'pointer');
+      }
+
+      function dragended (d) {
+        d3.select(this).style('cursor', 'default');
+      }
+
+      dragHandler(labelsG.selectAll('.text-data'));
 
       labelsG.selectAll('.text-data-nodes')
         .data(data)
@@ -233,6 +261,7 @@ export function wordPlotD3 () {
         .enter()
         .append('line')
         .attr('class', 'link')
+        .attr('id', d => `${d.text.replace(/ /g, '_')}_link`)
         .attr('x1', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('y1', d => yScale(parseFloat(d[yAxisProperty])))
         .attr('x2', d => xScale(parseFloat(d[xAxisProperty])))
@@ -322,6 +351,7 @@ export function wordPlotD3 () {
           .enter()
           .append('text')
           .attr('class', 'text-data')
+          .attr('id', d => `${d.text.replace(/ /g, '_')}_label`)
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
           .attr('font-size', textFontSize)
@@ -347,6 +377,7 @@ export function wordPlotD3 () {
           .enter()
           .append('line')
           .attr('class', 'link')
+          .attr('id', d => `${d.text.replace(/ /g, '_')}_link`)
           .attr('x1', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y1', d => yScale(parseFloat(d[yAxisProperty])))
           .attr('x2', d => xScale(parseFloat(d[xAxisProperty])))
@@ -358,6 +389,7 @@ export function wordPlotD3 () {
           .transition()
           .ease(d3.easeLinear)
           .duration(750)
+          .attr('id', d => `${d.text.replace(/ /g, '_')}_label`)
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
           .text(d => d.text);
@@ -373,6 +405,7 @@ export function wordPlotD3 () {
           .transition()
           .ease(d3.easeLinear)
           .duration(750)
+          .attr('id', d => `${d.text.replace(/ /g, '_')}_link`)
           .attr('class', 'link')
           .attr('x1', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y1', d => yScale(parseFloat(d[yAxisProperty])))
