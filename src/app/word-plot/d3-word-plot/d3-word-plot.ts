@@ -226,8 +226,14 @@ export function wordPlotD3 () {
 
       function dragged (d) {
         d3.select(this)
-          .attr('x', d3.event.x)
-          .attr('y', d3.event.y);
+        .attr('x', (d) => {
+          d.x = d3.event.x;
+          return d3.event.x;
+        })
+        .attr('y', (d) => {
+          d.y = d3.event.y;
+          return d3.event.y;
+        });
 
         const id = d3.select(this).attr('id').slice(0, -6);
 
