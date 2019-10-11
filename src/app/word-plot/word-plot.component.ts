@@ -30,8 +30,8 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
 
   constructor () {
     this.salaryScatterChart = wordPlotD3();
-    this.salaryScatterChart.height(600);
-    this.salaryScatterChart.width(1000);
+    this.salaryScatterChart.height(800);
+    this.salaryScatterChart.width(1200);
   }
 
   ngAfterViewInit () {

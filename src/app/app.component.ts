@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
 
   changeData() {
     this.data = this.symptoms.map(text => {
-      return {xCoordinate: Math.random() * 10, yCoordinate: Math.random() * 10, text: text.slice(1)};
+      return {xCoordinate: Math.random() * 10, yCoordinate: Math.random() * 10, text: text};
     });
   }
 

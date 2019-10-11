@@ -7,8 +7,8 @@ const margin = {top: 50, right: 50, bottom: 50, left: 100};
 export function wordPlotD3() {
 
   const initialConfiguration = {
-    width: 1000,
-    height: 600,
+    width: 1200,
+    height: 800,
     textFontSize: 15,
     data: [],
     xAxisProperty: 'xCoordinate',
@@ -116,7 +116,7 @@ export function wordPlotD3() {
 
       // Zoom setup
       const zoom = d3.zoom()
-        .scaleExtent([1 / 2, 20])
+        .scaleExtent([1 / 16, 20])
         .extent([[0, 0], [width, height]])
         .filter(function () {
           return d3.event.type === 'touchstart'
@@ -163,7 +163,7 @@ export function wordPlotD3() {
       function zoomEnd() {
         forceNodesData = getForceNodesData();
         simulation.nodes(forceNodesData);
-        simulation.alpha(3).restart();
+        simulation.alpha(10).restart();
       }
 
       const zoomHost = svg.append('rect')
@@ -275,12 +275,13 @@ export function wordPlotD3() {
         .attr('stroke-width', 0.6)
         .attr('stroke', 'gray');
 
-      const repelForce = d3.forceManyBody().strength(-100).distanceMax(100).distanceMin(0);
-      const attractForce = d3.forceManyBody().strength(40).distanceMax(200).distanceMin(150);
+      const repelForce = d3.forceManyBody().strength(-10).distanceMax(100).distanceMin(1);
+      const attractForce = d3.forceManyBody().strength(4).distanceMax(200).distanceMin(150);
       const simulation = d3.forceSimulation(forceNodesData)
-        .alphaDecay(0.15)
+        .alphaDecay(0.17)
         .force('attractForce', attractForce)
         .force('repelForce', repelForce)
+        // .force('collideForce', collideForce)
         .on('tick', ticked);
 
       function ticked() {
@@ -289,12 +290,8 @@ export function wordPlotD3() {
           .transition()
           .ease(d3.easeLinear)
           .duration(100)
-          .attr('x', function (d) {
-            return d.x;
-          })
-          .attr('y', function (d) {
-            return d.y;
-          });
+          .attr('x', d => d.x)
+          .attr('y', d => d.y);
 
         labelsG.selectAll('.link').data(forceNodesData)
           .attr('x1', d => zoomedXScale(parseFloat(d.xCoordinate)))
