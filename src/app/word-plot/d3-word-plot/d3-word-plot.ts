@@ -4,7 +4,7 @@ import {Utils} from './utils';
 
 const margin = {top: 50, right: 50, bottom: 50, left: 100};
 
-export function wordPlotD3 () {
+export function wordPlotD3() {
 
   const initialConfiguration = {
     width: 1000,
@@ -55,7 +55,7 @@ export function wordPlotD3 () {
   let medianVisible = true;
   let solidAxisTicks = true;
 
-  function chart (selection) {
+  function chart(selection) {
     selection.each(function () {
       data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
       let yAxisValues = data.map(d => parseFloat(d[yAxisProperty]));
@@ -126,7 +126,7 @@ export function wordPlotD3 () {
         .on('zoom', zoomed)
         .on('end', zoomEnd);
 
-      function zoomed () {
+      function zoomed() {
         zoomedXScale = d3.event.transform.rescaleX(xScale);
         zoomedYScale = d3.event.transform.rescaleY(yScale);
         if (xAxisGridVisible) {
@@ -160,7 +160,7 @@ export function wordPlotD3 () {
           .attr('y', d => zoomedYScale(parseFloat(d.y)));
       }
 
-      function zoomEnd () {
+      function zoomEnd() {
         forceNodesData = getForceNodesData();
         simulation.nodes(forceNodesData);
         simulation.alpha(3).restart();
@@ -224,16 +224,16 @@ export function wordPlotD3 () {
         .on('drag', dragged)
         .on('end', dragended);
 
-      function dragged (d) {
+      function dragged(d) {
         d3.select(this)
-        .attr('x', (d) => {
-          d.x = d3.event.x;
-          return d3.event.x;
-        })
-        .attr('y', (d) => {
-          d.y = d3.event.y;
-          return d3.event.y;
-        });
+          .attr('x', (d: any) => {
+            d.x = d3.event.x;
+            return d3.event.x;
+          })
+          .attr('y', (d: any) => {
+            d.y = d3.event.y;
+            return d3.event.y;
+          });
 
         const id = d3.select(this).attr('id').slice(0, -6);
 
@@ -242,11 +242,11 @@ export function wordPlotD3 () {
           .attr('y2', d3.event.y);
       }
 
-      function dragstarted (d) {
+      function dragstarted(d) {
         d3.select(this).style('cursor', 'pointer');
       }
 
-      function dragended (d) {
+      function dragended(d) {
         d3.select(this).style('cursor', 'default');
       }
 
@@ -275,15 +275,15 @@ export function wordPlotD3 () {
         .attr('stroke-width', 0.6)
         .attr('stroke', 'gray');
 
-      const repelForce = d3.forceManyBody().strength(-120).distanceMax(100).distanceMin(0);
-      const attractForce = d3.forceManyBody().strength(50).distanceMax(200).distanceMin(100);
+      const repelForce = d3.forceManyBody().strength(-100).distanceMax(100).distanceMin(0);
+      const attractForce = d3.forceManyBody().strength(40).distanceMax(200).distanceMin(150);
       const simulation = d3.forceSimulation(forceNodesData)
         .alphaDecay(0.15)
         .force('attractForce', attractForce)
         .force('repelForce', repelForce)
         .on('tick', ticked);
 
-      function ticked () {
+      function ticked() {
         labelsG.selectAll('.text-data')
           .data(forceNodesData)
           .transition()
@@ -303,7 +303,7 @@ export function wordPlotD3 () {
           .attr('y2', d => d.y);
       }
 
-      function getForceNodesData () {
+      function getForceNodesData() {
         return data.map(d => {
           return Object.assign(d, {
             x: zoomedXScale(parseFloat(d[xAxisProperty])),
@@ -377,7 +377,6 @@ export function wordPlotD3 () {
           .attr('cy', d => yScale(parseFloat(d[yAxisProperty])))
           .attr('r', 2)
           .attr('fill', 'gray');
-
 
         updatedLinksData
           .enter()
