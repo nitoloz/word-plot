@@ -207,6 +207,7 @@ export function wordPlotD3() {
         .enter()
         .append('text')
         .attr('class', 'text-data')
+        .attr('text-anchor', 'middle')
         .attr('id', d => `${d.text.replace(/ /g, '_')}_label`)
         .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
         .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
@@ -275,8 +276,8 @@ export function wordPlotD3() {
         .attr('stroke-width', 0.6)
         .attr('stroke', 'gray');
 
-      const repelForce = d3.forceManyBody().strength(-10).distanceMax(100).distanceMin(1);
-      const attractForce = d3.forceManyBody().strength(4).distanceMax(200).distanceMin(150);
+      const repelForce = d3.forceManyBody().strength(-30).distanceMax(100);
+      const attractForce = d3.forceManyBody().strength(2).distanceMax(200).distanceMin(150);
       const simulation = d3.forceSimulation(forceNodesData)
         .alphaDecay(0.17)
         .force('attractForce', attractForce)
@@ -354,6 +355,7 @@ export function wordPlotD3() {
           .enter()
           .append('text')
           .attr('class', 'text-data')
+          .attr('text-anchor', 'middle')
           .attr('id', d => `${d.text.replace(/ /g, '_')}_label`)
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
