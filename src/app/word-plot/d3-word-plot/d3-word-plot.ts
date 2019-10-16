@@ -1,5 +1,9 @@
+// tslint:disable
+
 import * as d3 from 'd3';
+
 import * as d3Tip from 'd3-tip';
+import {d3Labeler} from './d3-labeler';
 import {Utils} from './utils';
 
 const margin = {top: 50, right: 50, bottom: 50, left: 100};
@@ -304,6 +308,13 @@ export function wordPlotD3() {
           });
         });
       }
+
+      // (d3Labeler as any)
+      //   .label(getForceNodesData())
+      //   .anchor(getForceNodesData())
+      //   .width(width)
+      //   .height(height)
+      //   .start(1000);
 
       updateData = function () {
         data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
