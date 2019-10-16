@@ -28,11 +28,6 @@ export function wordPlotD3() {
     {text: 'DOMINANT', x: 10, y: 10, color: '#cfcbd2'}
   ];
 
-  const medians = [
-    {text: 'EMERGENT', x: 5, y: 10, color: '#ef999c'},
-    {text: 'DOMINANT', x: 10, y: 10, color: '#cfcbd2'}
-  ];
-
   let width = initialConfiguration.width,
     height = initialConfiguration.height,
     data = initialConfiguration.data,
