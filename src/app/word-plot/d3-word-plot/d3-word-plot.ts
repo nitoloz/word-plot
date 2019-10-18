@@ -187,37 +187,7 @@ export function wordPlotD3() {
       const labelsG = svg.append('g')
         .attr('clip-path', 'url(#clip)');
 
-      labelsG.selectAll('.text-headers')
-        .data(markers)
-        .enter()
-        .append('text')
-        .attr('class', 'text-headers')
-        .attr('x', d => xScale(parseFloat(d.x)))
-        .attr('y', d => yScale(parseFloat(d.y)))
-        .style('text-anchor', 'end')
-        .attr('font-size', '20')
-        .attr('fill', (d) => d.color)
-        .text(d => d.text);
-
       forceNodesData = getForceNodesData();
-
-      labelsG.selectAll('.text-data')
-        .data(data)
-        .enter()
-        .append('text')
-        .attr('class', 'text-data')
-        .attr('text-anchor', 'middle')
-        .attr('id', d => `${d.text.replace(/ /g, '_')}_label`)
-        .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
-        .attr('y', d => yScale(parseFloat(d[yAxisProperty])))
-        .attr('font-size', textFontSize)
-        .text(d => d.text)
-        .on('mouseover', function (d) {
-          tooltip.show(d, this);
-        })
-        .on('mouseout', function () {
-          tooltip.hide();
-        });
 
       const dragHandler = d3.drag()
         .on('start', dragstarted)
@@ -249,31 +219,6 @@ export function wordPlotD3() {
       function dragended(d) {
         d3.select(this).style('cursor', 'default');
       }
-
-      dragHandler(labelsG.selectAll('.text-data'));
-
-      labelsG.selectAll('.text-data-nodes')
-        .data(data)
-        .enter()
-        .append('circle')
-        .attr('class', 'text-data-nodes')
-        .attr('cx', d => xScale(parseFloat(d[xAxisProperty])))
-        .attr('cy', d => yScale(parseFloat(d[yAxisProperty])))
-        .attr('r', 2)
-        .attr('fill', 'gray');
-
-      labelsG.selectAll('.link')
-        .data(data)
-        .enter()
-        .append('line')
-        .attr('class', 'link')
-        .attr('id', d => `${d.text.replace(/ /g, '_')}_link`)
-        .attr('x1', d => xScale(parseFloat(d[xAxisProperty])))
-        .attr('y1', d => yScale(parseFloat(d[yAxisProperty])))
-        .attr('x2', d => xScale(parseFloat(d[xAxisProperty])))
-        .attr('y2', d => yScale(parseFloat(d[yAxisProperty])))
-        .attr('stroke-width', 0.6)
-        .attr('stroke', 'gray');
 
       const repelForce = d3.forceManyBody().strength(-30).distanceMax(100);
       const attractForce = d3.forceManyBody().strength(2).distanceMax(200).distanceMin(150);
@@ -455,6 +400,7 @@ export function wordPlotD3() {
         forceNodesData = getForceNodesData();
         simulation.nodes(forceNodesData);
         resetZoom();
+        dragHandler(labelsG.selectAll('.text-data'));
       };
 
       zoomIn = function () {
