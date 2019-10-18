@@ -44,7 +44,7 @@ export function wordPlotD3() {
     tooltipFormatter = initialConfiguration.tooltipFormatter;
   let updateData,
     zoomIn, zoomOut, resetZoom,
-    forceNodesData, labels, nodes, runLabelsSimulation, calculateLabelsNodes,
+    forceNodesData, labels, nodes,
     toggleXAxisGrid, toggleYAxisGrid, toggleTitle,
     toggleMedians, changeTicksStyle, changeTextFontSize = null;
 
@@ -160,8 +160,7 @@ export function wordPlotD3() {
       }
 
       function zoomEnd() {
-        forceNodesData = getForceNodesData();
-        calculateLabelsNodes();
+        calculateLabelsNodes(getForceNodesData());
         runLabelsSimulation();
       }
 
@@ -220,44 +219,8 @@ export function wordPlotD3() {
         d3.select(this).style('cursor', 'default');
       }
 
-      // const repelForce = d3.forceManyBody().strength(-30).distanceMax(100);
-      // const attractForce = d3.forceManyBody().strength(2).distanceMax(200).distanceMin(150);
-      // const simulation = d3.forceSimulation(forceNodesData)
-      //   .alphaDecay(0.17)
-      //   .force('attractForce', attractForce)
-      //   .force('repelForce', repelForce)
-      //   // .force('collideForce', collideForce)
-      //   .on('tick', ticked);
-      //
-      // function ticked() {
-      //   labelsG.selectAll('.text-data')
-      //     .data(forceNodesData)
-      //     .transition()
-      //     .ease(d3.easeLinear)
-      //     .duration(100)
-      //     .attr('x', d => d.x)
-      //     .attr('y', d => d.y);
-      //
-      //   labelsG.selectAll('.link').data(forceNodesData)
-      //     .attr('x1', d => zoomedXScale(parseFloat(d.xCoordinate)))
-      //     .attr('y1', d => zoomedYScale(parseFloat(d.yCoordinate)))
-      //     .attr('x2', d => d.x)
-      //     .attr('y2', d => d.y);
-      // }
-
-      function getForceNodesData() {
-        return data.map(d => {
-          return Object.assign(d, {
-            x: zoomedXScale(parseFloat(d[xAxisProperty])),
-            y: zoomedYScale(parseFloat(d[yAxisProperty])),
-            r: 2
-          });
-        });
-      }
-
       updateData = function () {
         data = data.filter(d => parseFloat(d[yAxisProperty]) > 0 && parseFloat(d[xAxisProperty]) > 0);
-        forceNodesData = getForceNodesData();
         yAxisValues = data.map(d => parseFloat(d[yAxisProperty]));
         xAxisValues = data.map(d => parseFloat(d[xAxisProperty]));
 
@@ -294,6 +257,7 @@ export function wordPlotD3() {
           .attr('x', d => xScale(parseFloat(d[xAxisProperty])))
           .attr('y', d => yScale(parseFloat(d[yAxisProperty])));
 
+        forceNodesData = getForceNodesData();
         const updatedTextData = labelsG.selectAll('.text-data').data(forceNodesData);
         const updatedNodesData = labelsG.selectAll('.text-data-nodes').data(forceNodesData);
         const updatedLinksData = labelsG.selectAll('.link').data(forceNodesData);
@@ -399,12 +363,12 @@ export function wordPlotD3() {
           forceNodesData[i].width = this.getBBox().width;
           forceNodesData[i].height = this.getBBox().height;
         });
-        calculateLabelsNodes();
+        calculateLabelsNodes(forceNodesData);
         runLabelsSimulation();
       };
 
-      calculateLabelsNodes = function () {
-        labels = forceNodesData.map(node => {
+      function calculateLabelsNodes(fullNodesData) {
+        labels = fullNodesData.map(node => {
           return {
             x: node.x,
             y: node.y,
@@ -414,16 +378,16 @@ export function wordPlotD3() {
           };
         });
 
-        nodes = forceNodesData.map(node => {
+        nodes = fullNodesData.map(node => {
           return {
             x: node.x,
             y: node.y,
             r: 2
           };
         });
-      };
+      }
 
-      runLabelsSimulation = function () {
+      function runLabelsSimulation() {
         (d3Labeler() as any)
           .label(labels)
           .anchor(nodes)
@@ -441,11 +405,19 @@ export function wordPlotD3() {
 
         labelsG.selectAll('.link')
           .data(labels)
-          // .attr('x1', d => zoomedXScale(parseFloat(d.xCoordinate)))
-          // .attr('y1', d => zoomedYScale(parseFloat(d.yCoordinate)))
           .attr('x2', d => d.x)
           .attr('y2', d => d.y);
-      };
+      }
+
+      function getForceNodesData() {
+        return data.map(d => {
+          return Object.assign(d, {
+            x: zoomedXScale(parseFloat(d[xAxisProperty])),
+            y: zoomedYScale(parseFloat(d[yAxisProperty])),
+            r: 2
+          });
+        });
+      }
 
       zoomIn = function () {
         zoom.scaleBy(zoomHost.transition().duration(750), 2);
