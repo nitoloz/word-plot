@@ -5,11 +5,13 @@
  * d3-tip v0.7.1
  
 Word plot is drawn by `word-plot` component. `word-plot` component has a single input parameter - `plotData` of type `PlotData[]` 
-where `PlotData` has 3 parameters: `x`, `y` and `text` corresponding to XY coordinates 
+where `PlotData` has 3 parameters: `xCoordinate`, `yCoordinate` and `text` corresponding to XY coordinates 
 and text that should be displayed. All manipulations with SVG elements are done within files located in `d3-word-plot` folder.
  
 Chart allow user to display an array of words and zoom to every word using double click, mouse wheel + `Ctrl` 
 or buttons located above the plot.
+
+Labels positioning is performed using simulated annealing implemented within the [D3-Labeler](https://github.com/tinker10/D3-Labeler) library.
 
 ## Install and run
 
@@ -27,3 +29,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Deploy
+
+Run `ng deploy` to deploy the project to Github pages.
