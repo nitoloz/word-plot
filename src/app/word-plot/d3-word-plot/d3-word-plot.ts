@@ -368,15 +368,7 @@ export function wordPlotD3() {
       };
 
       function calculateLabelsNodes(fullNodesData) {
-        labels = fullNodesData.map(node => {
-          return {
-            x: node.x,
-            y: node.y,
-            width: node.width,
-            height: node.height,
-            name: node.text
-          };
-        });
+        labels = fullNodesData.map(node => Object.assign(node, {name: node.text}));
 
         nodes = fullNodesData.map(node => {
           return {
@@ -393,7 +385,7 @@ export function wordPlotD3() {
           .anchor(nodes)
           .width(width - margin.left - margin.right)
           .height(height - margin.top - margin.bottom)
-          .start(1000);
+          .start(2000);
 
         labelsG.selectAll('.text-data')
           .data(labels)
