@@ -385,7 +385,7 @@ export function wordPlotD3() {
           .anchor(nodes)
           .width(width - margin.left - margin.right)
           .height(height - margin.top - margin.bottom)
-          .start(2000);
+          .start(500);
 
         labelsG.selectAll('.text-data')
           .data(labels)

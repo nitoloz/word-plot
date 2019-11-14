@@ -23,14 +23,12 @@ export class AppComponent implements OnInit {
   public data: PlotData[] = [];
 
   ngOnInit() {
-    this.data = this.symptoms.map(text => {
-      return {xCoordinate: Math.random() * 10, yCoordinate: Math.random() * 10, text};
-    });
+    this.changeData();
   }
 
   changeData() {
     this.data = this.symptoms.map(text => {
-      return {xCoordinate: Math.random() * 10, yCoordinate: Math.random() * 10, text: text};
+      return {xCoordinate: Math.random() * 10, yCoordinate: Math.random() * 10, text};
     });
   }
 
