@@ -21,7 +21,7 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
     showYAxisGrid: true,
     showMedianLines: true,
     showTitle: true,
-    textFontSize: 15,
+    textFontSize: 13,
     gridLineType: 'solid'
   };
   @ViewChild('chartWrapper', {static: false}) chartWrapper: ElementRef;

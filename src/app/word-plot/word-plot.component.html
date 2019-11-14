@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col s12">
     <div>
-      <button (click)="zoomIn()">Zoom in</button>
-      <button (click)="zoomOut()">Zoom out</button>
-      <button (click)="resetZoom()">Reset zoom</button>
+      <button class="btn" (click)="zoomIn()">Zoom in</button>
+      <button class="btn" (click)="zoomOut()">Zoom out</button>
+      <button class="btn" (click)="resetZoom()">Reset zoom</button>
     </div>
     <div>
       <label><input type="checkbox" [(ngModel)]="settings.showXAxisGrid" (change)="showXAxisGridChange()">Show X axis grid</label>
