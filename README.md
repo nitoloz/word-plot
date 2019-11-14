@@ -1,4 +1,10 @@
 ## Word plot
+Chart allow user to display an array of words and zoom to every word using double click, mouse wheel + `Ctrl` 
+or buttons located above the plot.
+
+Labels positioning is performed using simulated annealing implemented within the [D3-Labeler](https://github.com/tinker10/D3-Labeler) library.
+
+### Technologies
  Project is built using following frameworks and visualization libraries:
  * angular v8.2.4;
  * d3.js v5.11.0;
@@ -8,11 +14,6 @@ Word plot is drawn by `word-plot` component. `word-plot` component has a single 
 where `PlotData` has 3 parameters: `xCoordinate`, `yCoordinate` and `text` corresponding to XY coordinates 
 and text that should be displayed. All manipulations with SVG elements are done within files located in `d3-word-plot` folder.
  
-Chart allow user to display an array of words and zoom to every word using double click, mouse wheel + `Ctrl` 
-or buttons located above the plot.
-
-Labels positioning is performed using simulated annealing implemented within the [D3-Labeler](https://github.com/tinker10/D3-Labeler) library.
-
 ## Install and run
 
 In order to install all dependencies run `npm install` from the root folder (where `package.json` is stored).
