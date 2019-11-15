@@ -1,25 +1,49 @@
 <div class="row">
   <div class="col s12">
-    <div>
+    <div class="card-panel">
+
       <button class="btn" (click)="zoomIn()">Zoom in</button>
       <button class="btn" (click)="zoomOut()">Zoom out</button>
       <button class="btn" (click)="resetZoom()">Reset zoom</button>
-    </div>
-    <div>
-      <label><input type="checkbox" [(ngModel)]="settings.showXAxisGrid" (change)="showXAxisGridChange()">Show X axis grid</label>
-      <label><input type="checkbox" [(ngModel)]="settings.showYAxisGrid" (change)="showYAxisGridChange()">Show Y axis grid</label>
-      <label><input type="checkbox" [(ngModel)]="settings.showTitle" (change)="showTitleChange()">Show title</label>
-      <label><input type="checkbox" [(ngModel)]="settings.showMedianLines" (change)="showMedianChange()">Show medians</label>
-    </div>
-    <div>
-      <label>Grid line type: </label>
-      <input type="radio" value="solid" name="gender" [ngModel]="settings.gridLineType" (change)="chnageLineType()"> Solid
-      <input type="radio" value="dashed" name="gender" [ngModel]="settings.gridLineType" (change)="chnageLineType()"> Dashed
-    </div>
-    <div>
-      <label>Font size: </label>
-      <input type="number" value="15" [(ngModel)]="settings.textFontSize" (change)="chnageTextFontSize()">
+      <p>
+        <label>
+          <input type="checkbox" [(ngModel)]="settings.showXAxisGrid" (change)="showXAxisGridChange()">
+          <span>Show X axis grid</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" [(ngModel)]="settings.showYAxisGrid" (change)="showYAxisGridChange()">
+          <span>Show Y axis grid</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" [(ngModel)]="settings.showTitle" (change)="showTitleChange()">
+          <span>Show title</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" [(ngModel)]="settings.showMedianLines" (change)="showMedianChange()">
+          <span>Show medians</span>
+        </label>
+      </p>
+      <p>
+        <label>Grid line type:
+          <input type="radio" value="solid" name="gender" [ngModel]="settings.gridLineType" (change)="chnageLineType()"> Solid
+          <input type="radio" value="dashed" name="gender" [ngModel]="settings.gridLineType" (change)="chnageLineType()"> Dashed
+        </label>
+      </p>
+      <div class="input-field">
+        <input type="number" id="font-size" value="15" [(ngModel)]="settings.textFontSize" (change)="chnageTextFontSize()">
+        <label for="font-size">Font size: </label>
+      </div>
     </div>
   </div>
 </div>
-<div class="row" #chartWrapper></div>
+<div class="row">
+  <div class="col s12">
+    <div class="card-panel" #chartWrapper></div>
+  </div>
+</div>
