@@ -1,59 +1,64 @@
 <div class="row">
   <div class="col s12">
-    <div class="card-panel row">
-      <div class="col s4">
-        <p>Grid line type:</p>
-        <p>
+    <div class="card-panel">
+      <h5>Chart settings</h5>
+      <div class="row">
+        <div class="col s3">
+          Grid line type:
           <label>
             <input type="radio" value="solid" name="gridLineType" [ngModel]="settings.gridLineType" (change)="chnageLineType()">
             <span>Solid</span>
           </label>
-        </p>
-        <p>
           <label>
             <input type="radio" value="dashed" name="gridLineType" [ngModel]="settings.gridLineType" (change)="chnageLineType()">
             <span>Dashed</span>
           </label>
-        </p>
-        <div class="row">
-          <div class="input-field col s12">
-            <input type="number" id="font-size" placeholder="15" [(ngModel)]="settings.textFontSize" (change)="chnageTextFontSize()">
-            <label for="font-size" class="active">Font size: </label>
+          <p>
+            <button class="btn btn-small" (click)="zoomIn()">Zoom in</button>
+            <button class="btn btn-small" (click)="zoomOut()">Zoom out</button>
+            <button class="btn btn-small" (click)="resetZoom()">Reset zoom</button>
+          </p>
+        </div>
+
+        <div class="col s3">
+          <p>
+            <label>
+              <input type="checkbox" [(ngModel)]="settings.showXAxisGrid" (change)="showXAxisGridChange()">
+              <span>Show X axis grid</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input type="checkbox" [(ngModel)]="settings.showYAxisGrid" (change)="showYAxisGridChange()">
+              <span>Show Y axis grid</span>
+            </label>
+          </p>
+        </div>
+
+        <div class="col s3">
+          <p>
+            <label>
+              <input type="checkbox" [(ngModel)]="settings.showTitle" (change)="showTitleChange()">
+              <span>Show title</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input type="checkbox" [(ngModel)]="settings.showMedianLines" (change)="showMedianChange()">
+              <span>Show medians</span>
+            </label>
+          </p>
+        </div>
+
+        <div class="col s3">
+          <div class="row">
+            <div class="input-field col s12">
+              <input type="number" id="font-size" placeholder="Point labels font" [(ngModel)]="settings.textFontSize"
+                     (change)="chnageTextFontSize()">
+              <label for="font-size" class="active">Font size: </label>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="col s4">
-        <p>
-          <label>
-            <input type="checkbox" [(ngModel)]="settings.showXAxisGrid" (change)="showXAxisGridChange()">
-            <span>Show X axis grid</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input type="checkbox" [(ngModel)]="settings.showYAxisGrid" (change)="showYAxisGridChange()">
-            <span>Show Y axis grid</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input type="checkbox" [(ngModel)]="settings.showTitle" (change)="showTitleChange()">
-            <span>Show title</span>
-          </label>
-        </p>
-        <p>
-          <label>
-            <input type="checkbox" [(ngModel)]="settings.showMedianLines" (change)="showMedianChange()">
-            <span>Show medians</span>
-          </label>
-        </p>
-      </div>
-
-      <div class="col s4">
-        <button class="btn" (click)="zoomIn()">Zoom in</button>
-        <button class="btn" (click)="zoomOut()">Zoom out</button>
-        <button class="btn" (click)="resetZoom()">Reset zoom</button>
       </div>
     </div>
   </div>
