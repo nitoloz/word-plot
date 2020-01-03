@@ -2,7 +2,7 @@
   <div class="col s12">
     <div class="card-panel">
       <h5>Chart settings</h5>
-      <div class="row">
+      <div class="row last-row">
         <div class="col s3">
           Grid line type:
           <label>
@@ -13,11 +13,17 @@
             <input type="radio" value="dashed" name="gridLineType" [ngModel]="settings.gridLineType" (change)="chnageLineType()">
             <span>Dashed</span>
           </label>
-          <p>
-            <button class="btn btn-small" (click)="zoomIn()">Zoom in</button>
-            <button class="btn btn-small" (click)="zoomOut()">Zoom out</button>
-            <button class="btn btn-small" (click)="resetZoom()">Reset zoom</button>
-          </p>
+          <div class="row">
+            <div class="col l4 m12">
+              <button class="btn btn-small" (click)="zoomIn()">Zoom in</button>
+            </div>
+            <div class="col l4 m12">
+              <button class="btn btn-small" (click)="zoomOut()">Zoom out</button>
+            </div>
+            <div class="col l4 m12">
+              <button class="btn btn-small" (click)="resetZoom()">Reset zoom</button>
+            </div>
+          </div>
         </div>
 
         <div class="col s3">
