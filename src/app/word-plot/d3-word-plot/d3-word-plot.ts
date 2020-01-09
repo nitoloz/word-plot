@@ -466,56 +466,56 @@ export function wordPlotD3() {
   }
 
   chart.width = function (value) {
-    if (!arguments.length) return width;
+    if (!arguments.length) return chart;
     width = value;
     return chart;
   };
 
   chart.height = function (value) {
-    if (!arguments.length) return height;
+    if (!arguments.length) return chart;
     height = value;
     return chart;
   };
 
   chart.xAxisLabel = function (value) {
-    if (!arguments.length) return xAxisLabel;
+    if (!arguments.length) return chart;
     xAxisLabel = value;
     return chart;
   };
 
   chart.yAxisLabel = function (value) {
-    if (!arguments.length) return yAxisLabel;
+    if (!arguments.length) return chart;
     yAxisLabel = value;
     return chart;
   };
 
   chart.xAxisProperty = function (value) {
-    if (!arguments.length) return xAxisProperty;
+    if (!arguments.length) return chart;
     xAxisProperty = value;
     return chart;
   };
 
   chart.yAxisProperty = function (value) {
-    if (!arguments.length) return yAxisProperty;
+    if (!arguments.length) return chart;
     yAxisProperty = value;
     return chart;
   };
 
   chart.trellisingProperty = function (value) {
-    if (!arguments.length) return trellisingProperty;
+    if (!arguments.length) return chart;
     trellisingProperty = value;
     return chart;
   };
 
   chart.textFontSize = function (value) {
-    if (!arguments.length) return textFontSize;
+    if (!arguments.length) return chart;
     textFontSize = value;
     return chart;
   };
 
   chart.tooltipFormatter = function (value) {
     if (!arguments.length) {
-      return tooltipFormatter;
+      return chart;
     } else {
       if (value == null) {
         tooltipFormatter = initialConfiguration.tooltipFormatter;
@@ -527,7 +527,7 @@ export function wordPlotD3() {
   };
 
   chart.data = function (value) {
-    if (!arguments.length) return data;
+    if (!arguments.length) return chart;
     data = value;
     if (typeof updateData === 'function') updateData();
     return chart;

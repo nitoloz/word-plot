@@ -2,7 +2,6 @@ import {AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, V
 import * as d3 from 'd3';
 import {wordPlotD3} from './d3-word-plot/d3-word-plot';
 
-
 export interface PlotData {
   xCoordinate: string | number;
   yCoordinate: string | number;
@@ -28,13 +27,13 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
 
   @Input() plotData: PlotData[];
 
-  constructor () {
-    this.salaryScatterChart = wordPlotD3();
-    this.salaryScatterChart.height(800);
-    this.salaryScatterChart.width(1200);
+  constructor() {
+    this.salaryScatterChart = wordPlotD3()
+      .height(800)
+      .width(1200);
   }
 
-  ngAfterViewInit () {
+  ngAfterViewInit() {
     d3.select(this.chartWrapper.nativeElement)
       .call(this.salaryScatterChart);
     if (this.plotData) {
@@ -42,61 +41,61 @@ export class WordPlotComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  ngOnChanges (changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.plotData && this.plotData && this.salaryScatterChart) {
       this.salaryScatterChart.data(this.plotData);
     }
   }
 
-  zoomIn () {
+  zoomIn() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.zoomIn();
     }
   }
 
-  zoomOut () {
+  zoomOut() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.zoomOut();
     }
   }
 
-  resetZoom () {
+  resetZoom() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.resetZoom();
     }
   }
 
-  showXAxisGridChange () {
+  showXAxisGridChange() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.toggleXAxisGrid();
     }
   }
 
-  showYAxisGridChange () {
+  showYAxisGridChange() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.toggleYAxisGrid();
     }
   }
 
-  showTitleChange () {
+  showTitleChange() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.toggleTitle();
     }
   }
 
-  showMedianChange () {
+  showMedianChange() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.toggleMedians();
     }
   }
 
-  chnageLineType () {
+  chnageLineType() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.changeTicksStyle();
     }
   }
 
-  chnageTextFontSize () {
+  chnageTextFontSize() {
     if (this.salaryScatterChart) {
       this.salaryScatterChart.changeTextFontSize(this.settings.textFontSize);
     }
