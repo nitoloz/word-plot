@@ -35,4 +35,7 @@
 
 button, label {
   margin-right: 1em;
+  &.btn {
+    width: 100%;
+  }
 }
